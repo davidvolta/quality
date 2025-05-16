@@ -316,16 +316,12 @@ const TestOne = () => {
                   if (animationState === 'completed') return;
                   
                   const rect = el.getBoundingClientRect();
-                  const triggerPosition = window.innerHeight * 0.7; // Increased trigger area for more reliability
-                  
-                  // Check if element is in viewport
-                  const isInViewport = 
-                    rect.top < window.innerHeight && 
-                    rect.bottom > 0;
+                  const triggerPosition = window.innerHeight * 0.2; // Changed from 0.8 to 0.2 to trigger later
                   
                   // Check if element has reached trigger position and animation hasn't started
-                  if (animationState === 'waiting' && isInViewport && rect.top <= triggerPosition) {
-                    console.log('Animation triggered by scroll!');
+                  if (animationState === 'waiting' && rect.top <= triggerPosition) {
+                    // Log for debugging
+                    console.log('Animation triggered!', { top: rect.top, trigger: triggerPosition });
                     
                     // Save current scroll position
                     scrollY = window.scrollY;
@@ -335,22 +331,10 @@ const TestOne = () => {
                   }
                 };
                 
-                // Add initial checks for elements already in view on page load
+                // Add initial check on load
                 setTimeout(() => {
-                  // Check if element is already in viewport on load
-                  const rect = el.getBoundingClientRect();
-                  const isInViewport = 
-                    rect.top < window.innerHeight && 
-                    rect.bottom > 0;
-                    
-                  if (isInViewport && animationState === 'waiting') {
-                    console.log('Animation triggered by initial load!');
-                    startAnimation();
-                  } else {
-                    // Otherwise set up normal scroll detection
-                    handleScroll();
-                  }
-                }, 800);
+                  handleScroll();
+                }, 500);
                 
                 // Function to start the animation
                 const startAnimation = () => {
@@ -423,6 +407,11 @@ const TestOne = () => {
                     const leftItems = leftFeatures.querySelectorAll('li');
                     const rightItems = rightFeatures.querySelectorAll('li');
                     
+                    // Calculate total animation duration
+                    const leftDuration = 200 + (100 * (leftItems.length - 1));
+                    const rightDuration = 500 + (100 * (rightItems.length - 1));
+                    const totalDuration = Math.max(leftDuration, rightDuration);
+                    
                     // Animate left feature items
                     leftItems.forEach((item, index) => {
                       setTimeout(() => {
@@ -438,11 +427,17 @@ const TestOne = () => {
                         item.style.transform = 'translateY(0)';
                       }, 500 + (100 * index)); // Start right side a bit later
                     });
+                    
+                    // Release scroll hijacking only after all animations complete
+                    setTimeout(() => {
+                      isScrollHijacked = false;
+                      document.body.style.overflow = '';
+                    }, totalDuration + 100); // Add small buffer
+                  } else {
+                    // If no features to animate, release scroll immediately
+                    isScrollHijacked = false;
+                    document.body.style.overflow = '';
                   }
-                  
-                  // Release scroll hijacking
-                  isScrollHijacked = false;
-                  document.body.style.overflow = '';
                 };
                 
                 // Prevent scroll during animation
@@ -526,7 +521,6 @@ const TestOne = () => {
                   border: 'none',
                   background: 'transparent'
                 }}
-                ref={addToRefs} // Use existing animation system
               >
                 <li style={{ 
                   marginBottom: '8px', 
@@ -657,7 +651,6 @@ const TestOne = () => {
                   border: 'none',
                   background: 'transparent'
                 }}
-                ref={addToRefs} // Use existing animation system
               >
                 <li style={{ 
                   marginBottom: '8px', 
@@ -786,7 +779,7 @@ const TestOne = () => {
             <div style={{ 
               width: '100%', 
               height: isMobile ? '250px' : '350px',
-              backgroundImage: 'url("/assets/screenshots/ConstructUI2.png")',
+              backgroundImage: 'url("/assets/photos/ipad.png")',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               borderRadius: '8px',
@@ -912,6 +905,182 @@ const TestOne = () => {
         </div>
       </section>
 
+      {/* Digital Twin Section - Parallax */}
+      <section style={{ 
+        padding: '0', 
+        background: '#000',
+        position: 'relative',
+        height: '100vh',
+        overflow: 'hidden'
+      }}>
+        {/* Parallax Background Image */}
+        <div style={{ 
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '120%', // Taller than container to allow for parallax
+          backgroundImage: 'url("/assets/screenshots/ConstructUI2.png")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center top',
+          zIndex: 1,
+          opacity: '0.9',
+          transform: 'translateZ(0)',
+        }} 
+        ref={el => {
+          if (el) {
+            // Add parallax scroll effect
+            const handleScroll = () => {
+              const scrollTop = window.pageYOffset;
+              const sectionTop = el.parentElement.offsetTop;
+              const scrollPosition = scrollTop - sectionTop;
+              
+              // Only apply parallax if we're viewing the section
+              if (scrollTop + window.innerHeight > sectionTop && 
+                  scrollTop < sectionTop + el.parentElement.offsetHeight) {
+                // Move the background at a slower rate than scroll
+                el.style.transform = `translate3d(0, ${scrollPosition * 0.4}px, 0)`;
+              }
+            };
+            
+            window.addEventListener('scroll', handleScroll);
+            // Clean up event listener on component unmount
+            setTimeout(() => handleScroll(), 100); // Initial position
+          }
+        }}></div>
+        
+        {/* Text Overlay Box */}
+        <div style={{ 
+          position: 'absolute',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 2
+        }}>
+          <div style={{ 
+            background: 'rgba(0, 0, 0, 0.75)',
+            backdropFilter: 'blur(4px)',
+            padding: isMobile ? '44px 33px' : '66px 66px',
+            borderRadius: '8px',
+            maxWidth: '990px',
+            width: '90%',
+            margin: '0 auto',
+            textAlign: 'center',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <div style={{ marginBottom: '20px' }}>
+              <img 
+                src="/assets/logos/TerabaseConstructLogo.png" 
+                alt="Terabase Construct" 
+                style={{ 
+                  height: '50px', 
+                  width: 'auto',
+                  marginBottom: '10px',
+                  filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+                }}
+              />
+            </div>
+            <h2 style={{ 
+              fontSize: isMobile ? '32px' : '42px', 
+              fontWeight: '600', 
+              marginBottom: '24px', 
+              color: '#fff'
+            }}>
+              See the Job, Not Just the List
+            </h2>
+            <ul ref={addToRefs} style={{ 
+              color: '#ccc', 
+              fontSize: isMobile ? '14px' : '16px', 
+              paddingLeft: '0',
+              marginBottom: '0',
+              display: 'flex',
+              flexDirection: isMobile ? 'column' : 'row',
+              gap: '20px',
+              justifyContent: 'center',
+              listStyleType: 'none'
+            }}>
+              <li style={{ 
+                marginBottom: isMobile ? '8px' : '0', 
+                opacity: '0', 
+                transform: 'translateY(20px)', 
+                transition: 'opacity 0.5s ease, transform 0.5s ease',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                maxWidth: '180px'
+              }}>
+                <div style={{ marginBottom: '10px', fontSize: '24px', color: 'white' }}>
+                  <img 
+                    src="/assets/icons/pin.png" 
+                    alt="Map pin icon" 
+                    style={{ 
+                      width: '30px', 
+                      height: '30px',
+                      margin: '0 auto'
+                    }} 
+                  />
+                </div>
+                Map-based interface with every QC activity pinned
+              </li>
+              <li style={{ 
+                marginBottom: isMobile ? '8px' : '0', 
+                opacity: '0', 
+                transform: 'translateY(20px)', 
+                transition: 'opacity 0.5s ease, transform 0.5s ease',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                maxWidth: '180px'
+              }}>
+                <div style={{ marginBottom: '10px', fontSize: '24px', color: 'white' }}>
+                  <img 
+                    src="/assets/icons/history.png" 
+                    alt="History icon" 
+                    style={{ 
+                      width: '30px', 
+                      height: '30px',
+                      margin: '0 auto'
+                    }} 
+                  />
+                </div>
+                Historical record of activities
+              </li>
+              <li style={{ 
+                marginBottom: '0', 
+                opacity: '0', 
+                transform: 'translateY(20px)', 
+                transition: 'opacity 0.5s ease, transform 0.5s ease',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                maxWidth: '180px'
+              }}>
+                <div style={{ marginBottom: '10px', fontSize: '24px', color: 'white' }}>
+                  <img 
+                    src="/assets/icons/findme.png" 
+                    alt="Navigation icon" 
+                    style={{ 
+                      width: '30px', 
+                      height: '30px',
+                      margin: '0 auto'
+                    }} 
+                  />
+                </div>
+                Built-in navigation to find work on site
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       {/* Field Mode Section */}
       <section style={{ padding: isMobile ? '40px 20px' : '80px 0', background: '#000' }}>
         <div className="container">
@@ -1033,338 +1202,6 @@ const TestOne = () => {
         </div>
       </section>
 
-      {/* Inspections Program Section */}
-      <section style={{ padding: isMobile ? '40px 20px' : '80px 0', background: '#000' }}>
-        <div className="container">
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', 
-            gap: '40px', 
-            alignItems: 'center' 
-          }}>
-            <div style={{ 
-              width: '100%', 
-              height: isMobile ? '250px' : '350px',
-              backgroundImage: 'url("/assets/photos/ipad.png")',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              borderRadius: '8px',
-              border: 'none',
-              order: isMobile ? '-1' : '0',
-              opacity: '0',
-              transform: 'translateY(40px)',
-              transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
-            }} ref={addToImageRefs}></div>
-            <div>
-              <h2 style={{ 
-                fontSize: isMobile ? '24px' : '28px', 
-                fontWeight: '600', 
-                marginBottom: '24px', 
-                color: '#fff',
-                textAlign: isMobile ? 'center' : 'left' 
-              }}>
-                Inspections Program: From random checks to structured excellence
-              </h2>
-              <p style={{ fontSize: isMobile ? '16px' : '18px', color: '#999', marginBottom: '24px', lineHeight: '1.6' }}>
-                Whether you're doing a full handoff inspection or spot-checking piles, Construct makes inspections easy to build, manage, and track.
-              </p>
-              <ul ref={addToRefs} style={{ color: '#999', fontSize: isMobile ? '14px' : '16px', paddingLeft: '20px', marginBottom: '24px' }}>
-                <li style={{ 
-                  marginBottom: '8px', 
-                  opacity: '0', 
-                  transform: 'translateY(20px)', 
-                  transition: 'opacity 0.5s ease, transform 0.5s ease' 
-                }}>Inspection templates for every scope</li>
-                <li style={{ 
-                  marginBottom: '8px', 
-                  opacity: '0', 
-                  transform: 'translateY(20px)', 
-                  transition: 'opacity 0.5s ease, transform 0.5s ease' 
-                }}>Location-linked findings and status</li>
-                <li style={{ 
-                  marginBottom: '8px', 
-                  opacity: '0', 
-                  transform: 'translateY(20px)', 
-                  transition: 'opacity 0.5s ease, transform 0.5s ease' 
-                }}>Export-ready reports for walkthroughs</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Digital Twin Section - Parallax */}
-      <section style={{ 
-        padding: '0', 
-        background: '#000',
-        position: 'relative',
-        height: isMobile ? '550px' : '700px',
-        overflow: 'hidden'
-      }}>
-        {/* Parallax Background Image */}
-        <div style={{ 
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '120%', // Taller than container to allow for parallax
-          backgroundImage: 'url("/assets/screenshots/ConstructUI2.png")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center top',
-          zIndex: 1,
-          opacity: '0.9',
-          transform: 'translateZ(0)',
-        }} 
-        ref={el => {
-          if (el) {
-            // Add parallax scroll effect
-            const handleScroll = () => {
-              const scrollTop = window.pageYOffset;
-              const sectionTop = el.parentElement.offsetTop;
-              const scrollPosition = scrollTop - sectionTop;
-              
-              // Only apply parallax if we're viewing the section
-              if (scrollTop + window.innerHeight > sectionTop && 
-                  scrollTop < sectionTop + el.parentElement.offsetHeight) {
-                // Move the background at a slower rate than scroll
-                el.style.transform = `translate3d(0, ${scrollPosition * 0.4}px, 0)`;
-              }
-            };
-            
-            window.addEventListener('scroll', handleScroll);
-            // Clean up event listener on component unmount
-            setTimeout(() => handleScroll(), 100); // Initial position
-          }
-        }}></div>
-        
-        {/* Text Overlay Box */}
-        <div style={{ 
-          position: 'absolute',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: 2
-        }}>
-          <div style={{ 
-            background: 'rgba(0, 0, 0, 0.75)',
-            backdropFilter: 'blur(4px)',
-            padding: isMobile ? '40px 30px' : '60px 60px',
-            borderRadius: '8px',
-            maxWidth: '900px',
-            width: '90%',
-            margin: '0 auto',
-            textAlign: 'center',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}>
-            <div style={{ marginBottom: '20px' }}>
-              <img 
-                src="/assets/logos/TerabaseConstructLogo.png" 
-                alt="Terabase Construct" 
-                style={{ 
-                  height: '50px', 
-                  width: 'auto',
-                  marginBottom: '10px',
-                  filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
-                }}
-              />
-            </div>
-            <h2 style={{ 
-              fontSize: isMobile ? '32px' : '42px', 
-              fontWeight: '600', 
-              marginBottom: '24px', 
-              color: '#fff'
-            }}>
-              See the Job, Not Just the List
-            </h2>
-            <ul ref={addToRefs} style={{ 
-              color: '#ccc', 
-              fontSize: isMobile ? '14px' : '16px', 
-              paddingLeft: '0',
-              marginBottom: '0',
-              display: 'flex',
-              flexDirection: isMobile ? 'column' : 'row',
-              gap: '20px',
-              justifyContent: 'center',
-              listStyleType: 'none'
-            }}>
-              <li style={{ 
-                marginBottom: isMobile ? '8px' : '0', 
-                opacity: '0', 
-                transform: 'translateY(20px)', 
-                transition: 'opacity 0.5s ease, transform 0.5s ease',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                maxWidth: '180px'
-              }}>
-                <div style={{ marginBottom: '10px', fontSize: '24px', color: 'white' }}>
-                  <img 
-                    src="/assets/icons/pin.png" 
-                    alt="Map pin icon" 
-                    style={{ 
-                      width: '30px', 
-                      height: '30px',
-                      margin: '0 auto'
-                    }} 
-                  />
-                </div>
-                Map-based interface with every QC activity pinned
-              </li>
-              <li style={{ 
-                marginBottom: isMobile ? '8px' : '0', 
-                opacity: '0', 
-                transform: 'translateY(20px)', 
-                transition: 'opacity 0.5s ease, transform 0.5s ease',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                maxWidth: '180px'
-              }}>
-                <div style={{ marginBottom: '10px', fontSize: '24px', color: 'white' }}>
-                  <img 
-                    src="/assets/icons/history.png" 
-                    alt="History icon" 
-                    style={{ 
-                      width: '30px', 
-                      height: '30px',
-                      margin: '0 auto'
-                    }} 
-                  />
-                </div>
-                Historical record of activities
-              </li>
-              <li style={{ 
-                marginBottom: '0', 
-                opacity: '0', 
-                transform: 'translateY(20px)', 
-                transition: 'opacity 0.5s ease, transform 0.5s ease',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                maxWidth: '180px'
-              }}>
-                <div style={{ marginBottom: '10px', fontSize: '24px', color: 'white' }}>
-                  <img 
-                    src="/assets/icons/findme.png" 
-                    alt="Navigation icon" 
-                    style={{ 
-                      width: '30px', 
-                      height: '30px',
-                      margin: '0 auto'
-                    }} 
-                  />
-                </div>
-                Built-in navigation to find work on site
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* Reporting & Exports Section */}
-      <section style={{ padding: '80px 0', background: '#000' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'center' }}>
-            <div style={{ 
-              width: '100%', 
-              height: '350px', 
-              backgroundImage: 'url("/assets/screenshots/ConstructUI4.png")',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              borderRadius: '8px',
-              border: 'none',
-              opacity: '0',
-              transform: 'translateY(40px)',
-              transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
-            }} ref={addToImageRefs}></div>
-            <div>
-              <h2 style={{ fontSize: '28px', fontWeight: '600', marginBottom: '24px', color: '#fff' }}>
-                Reporting & Exports: From punchlist to PowerBI
-              </h2>
-              <p style={{ fontSize: '18px', color: '#999', marginBottom: '24px', lineHeight: '1.6' }}>
-                Need to report out? Construct makes it easy. Export observations, inspections, and summaries in the formats your teams already use.
-              </p>
-              <ul ref={addToRefs} style={{ color: '#999', fontSize: '16px', paddingLeft: '20px', marginBottom: '24px' }}>
-                <li style={{ 
-                  marginBottom: '8px', 
-                  opacity: '0', 
-                  transform: 'translateY(20px)', 
-                  transition: 'opacity 0.5s ease, transform 0.5s ease' 
-                }}>Custom Excel exports for remediation crews</li>
-                <li style={{ 
-                  marginBottom: '8px', 
-                  opacity: '0', 
-                  transform: 'translateY(20px)', 
-                  transition: 'opacity 0.5s ease, transform 0.5s ease' 
-                }}>CSV reports for inspections</li>
-                <li style={{ 
-                  marginBottom: '8px', 
-                  opacity: '0', 
-                  transform: 'translateY(20px)', 
-                  transition: 'opacity 0.5s ease, transform 0.5s ease' 
-                }}>API access coming soon for PowerBI and Procore</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* GPS & Site Navigation Section */}
-      <section style={{ padding: '80px 0', background: '#0A0A0A' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'center' }}>
-            <div>
-              <h2 style={{ fontSize: '28px', fontWeight: '600', marginBottom: '24px', color: '#fff' }}>
-                GPS & Site Navigation: Know where you're needed
-              </h2>
-              <p style={{ fontSize: '18px', color: '#999', marginBottom: '24px', lineHeight: '1.6' }}>
-                You're not just logging data — you're moving through a 1,000-acre job site. Construct uses GPS to help you locate issues, scan the work, and get there faster.
-              </p>
-              <ul ref={addToRefs} style={{ color: '#999', fontSize: '16px', paddingLeft: '20px', marginBottom: '24px' }}>
-                <li style={{ 
-                  marginBottom: '8px', 
-                  opacity: '0', 
-                  transform: 'translateY(20px)', 
-                  transition: 'opacity 0.5s ease, transform 0.5s ease' 
-                }}>Geotagged observations</li>
-                <li style={{ 
-                  marginBottom: '8px', 
-                  opacity: '0', 
-                  transform: 'translateY(20px)', 
-                  transition: 'opacity 0.5s ease, transform 0.5s ease' 
-                }}>Real-time location on the site map</li>
-                <li style={{ 
-                  marginBottom: '8px', 
-                  opacity: '0', 
-                  transform: 'translateY(20px)', 
-                  transition: 'opacity 0.5s ease, transform 0.5s ease' 
-                }}>AI-powered inspection suggestions based on location (beta)</li>
-              </ul>
-            </div>
-            <div style={{ 
-              width: '100%', 
-              height: '350px', 
-              backgroundImage: 'url("/assets/screenshots/IMG_6857.PNG")',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              borderRadius: '8px',
-              border: 'none',
-              opacity: '0',
-              transform: 'translateY(40px)',
-              transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
-            }} ref={addToImageRefs}></div>
-          </div>
-        </div>
-      </section>
-
       {/* Plugged In Section */}
       <section style={{ padding: '80px 0', background: '#000' }}>
         <div className="container">
@@ -1372,7 +1209,7 @@ const TestOne = () => {
             <div style={{ 
               width: '100%', 
               height: '350px', 
-              backgroundImage: 'url("/assets/screenshots/ConstructUI3.png")',
+              backgroundImage: 'url("/assets/photos/export.png")',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               borderRadius: '8px',
@@ -1386,7 +1223,7 @@ const TestOne = () => {
                 Plugged In: Procore, Sharepoint, and more
               </h2>
               <p style={{ fontSize: '18px', color: '#999', marginBottom: '24px', lineHeight: '1.6' }}>
-                You don't need another silo. Construct integrates with the tools you're already using — so nothing gets lost between systems.
+                You don't need another silo. Construct integrates with the tools you're already using — from Procore to PowerBI — so nothing gets lost between systems. Export observations, inspections, and summaries in the formats your teams already use.
               </p>
               <ul ref={addToRefs} style={{ color: '#999', fontSize: '16px', paddingLeft: '20px', marginBottom: '24px' }}>
                 <li style={{ 
@@ -1406,7 +1243,19 @@ const TestOne = () => {
                   opacity: '0', 
                   transform: 'translateY(20px)', 
                   transition: 'opacity 0.5s ease, transform 0.5s ease' 
-                }}>CSV/Excel exports compatible with every major platform</li>
+                }}>Excel exports for remediation crews</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(20px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease' 
+                }}>CSV reports for inspections</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(20px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease' 
+                }}>API access coming soon for PowerBI and Procore</li>
               </ul>
             </div>
           </div>
@@ -1414,17 +1263,28 @@ const TestOne = () => {
       </section>
 
       {/* Construct+ Section */}
-      <section style={{ padding: '80px 0', background: '#0A0A0A' }}>
+      <section style={{ padding: isMobile ? '40px 20px' : '80px 0', background: '#0A0A0A' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'center' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', 
+            gap: '40px', 
+            alignItems: 'center' 
+          }}>
             <div>
-              <h2 style={{ fontSize: '28px', fontWeight: '600', marginBottom: '24px', color: '#fff' }}>
-                Construct+: The Future of Real-time QA
+              <h2 style={{ 
+                fontSize: isMobile ? '24px' : '28px', 
+                fontWeight: '600', 
+                marginBottom: '24px', 
+                color: '#fff',
+                textAlign: isMobile ? 'center' : 'left' 
+              }}>
+                Coming Soon: The future of Real Time QA
               </h2>
-              <p style={{ fontSize: '18px', color: '#999', marginBottom: '24px', lineHeight: '1.6' }}>
+              <p style={{ fontSize: isMobile ? '16px' : '18px', color: '#999', marginBottom: '24px', lineHeight: '1.6' }}>
                 We're piloting new ways to automate QC using AI, robotics, and aerial capture. From drone imagery to sensor-based scans, Construct+ is building the future of field data — with less manual input, more real-time insight.
               </p>
-              <ul ref={addToRefs} style={{ color: '#999', fontSize: '16px', paddingLeft: '20px', marginBottom: '24px' }}>
+              <ul ref={addToRefs} style={{ color: '#999', fontSize: isMobile ? '14px' : '16px', paddingLeft: '20px', marginBottom: '24px' }}>
                 <li style={{ 
                   marginBottom: '8px', 
                   opacity: '0', 
@@ -1448,7 +1308,7 @@ const TestOne = () => {
             <div style={{ 
               width: '100%', 
               height: '350px', 
-              backgroundImage: 'url("/assets/photos/solar-farm-construction-aerial.jpg")',
+              backgroundImage: 'url("/assets/photos/construct_plus.png")',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               borderRadius: '8px',
