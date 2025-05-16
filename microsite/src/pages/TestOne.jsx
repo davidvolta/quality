@@ -779,16 +779,29 @@ const TestOne = () => {
             <div style={{ 
               width: '100%', 
               height: isMobile ? '250px' : '350px',
-              backgroundImage: 'url("/assets/photos/ipad.png")',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
               borderRadius: '8px',
               border: 'none',
               order: isMobile ? '-1' : '0',
               opacity: '0',
               transform: 'translateY(40px)',
-              transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
-            }} ref={addToImageRefs}></div>
+              transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
+              overflow: 'hidden'
+            }} ref={addToImageRefs}>
+              <video 
+                autoPlay 
+                loop 
+                muted 
+                playsInline
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  borderRadius: '8px'
+                }}
+              >
+                <source src="/assets/video/1091074319-preview.mp4" type="video/mp4" />
+              </video>
+            </div>
             <div>
               <h2 style={{ 
                 fontSize: isMobile ? '24px' : '28px', 
