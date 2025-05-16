@@ -280,18 +280,59 @@ const TestOne = () => {
             </div>
             <div style={{ 
               width: '100%', 
-              height: isMobile ? '350px' : '450px', 
-              backgroundImage: 'url("/assets/photos/empty_panels.png")',
-              backgroundSize: 'contain',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              borderRadius: '8px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '15px',
+              height: 'auto', 
+              backgroundColor: 'transparent',
               border: 'none',
               order: isMobile ? '-1' : '0',
               opacity: '0',
               transform: 'translateY(40px)',
               transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
-            }} ref={addToImageRefs}></div>
+            }} ref={addToImageRefs}>
+              <div style={{
+                width: '300px',
+                height: '150px',
+                backgroundImage: 'url("/assets/screenshots/1-1.png")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }}></div>
+              <div style={{
+                width: '300px',
+                height: '150px',
+                backgroundImage: 'url("/assets/screenshots/2-1.png")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }}></div>
+              <div style={{
+                width: '300px',
+                height: '150px',
+                backgroundImage: 'url("/assets/screenshots/2-2.png")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }}></div>
+              <div style={{
+                width: '300px',
+                height: '150px',
+                backgroundImage: 'url("/assets/screenshots/2-3.png")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                borderRadius: '6px',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }}></div>
+            </div>
           </div>
         </div>
       </section>
@@ -413,7 +454,22 @@ const TestOne = () => {
               transform: 'translateY(40px)',
               transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
             }} ref={addToImageRefs}>
-              <CircleProgress percentage={40} color="#50B8E2" size={isMobile ? 200 : 300} />
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
+              }}>
+                <CircleProgress percentage={40} color="#50B8E2" size={isMobile ? 200 : 300} />
+                <p style={{
+                  fontFamily: 'Chivo, sans-serif',
+                  fontSize: isMobile ? '14px' : '16px',
+                  color: '#999',
+                  marginTop: '20px',
+                  textAlign: 'center'
+                }}>
+                  Amount of site injuries associated with rework
+                </p>
+              </div>
             </div>
           </div>
         </div>
