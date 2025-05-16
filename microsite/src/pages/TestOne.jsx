@@ -316,10 +316,17 @@ const TestOne = () => {
                   if (animationState === 'completed') return;
                   
                   const rect = el.getBoundingClientRect();
-                  const triggerPosition = window.innerHeight * 0.2; // Reduced from 0.3 to 0.2 to trigger later
+                  const triggerPosition = window.innerHeight * 0.7; // Increased trigger area for more reliability
+                  
+                  // Check if element is in viewport
+                  const isInViewport = 
+                    rect.top < window.innerHeight && 
+                    rect.bottom > 0;
                   
                   // Check if element has reached trigger position and animation hasn't started
-                  if (animationState === 'waiting' && rect.top <= triggerPosition) {
+                  if (animationState === 'waiting' && isInViewport && rect.top <= triggerPosition) {
+                    console.log('Animation triggered by scroll!');
+                    
                     // Save current scroll position
                     scrollY = window.scrollY;
                     
@@ -327,6 +334,23 @@ const TestOne = () => {
                     startAnimation();
                   }
                 };
+                
+                // Add initial checks for elements already in view on page load
+                setTimeout(() => {
+                  // Check if element is already in viewport on load
+                  const rect = el.getBoundingClientRect();
+                  const isInViewport = 
+                    rect.top < window.innerHeight && 
+                    rect.bottom > 0;
+                    
+                  if (isInViewport && animationState === 'waiting') {
+                    console.log('Animation triggered by initial load!');
+                    startAnimation();
+                  } else {
+                    // Otherwise set up normal scroll detection
+                    handleScroll();
+                  }
+                }, 800);
                 
                 // Function to start the animation
                 const startAnimation = () => {
@@ -395,8 +419,25 @@ const TestOne = () => {
                     leftFeatures.style.opacity = '1';
                     rightFeatures.style.opacity = '1';
                     
-                    // Animation for each feature will be handled by the existing
-                    // IntersectionObserver in the component
+                    // Directly animate each list item with staggered delays
+                    const leftItems = leftFeatures.querySelectorAll('li');
+                    const rightItems = rightFeatures.querySelectorAll('li');
+                    
+                    // Animate left feature items
+                    leftItems.forEach((item, index) => {
+                      setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0)';
+                      }, 200 + (100 * index));
+                    });
+                    
+                    // Animate right feature items
+                    rightItems.forEach((item, index) => {
+                      setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0)';
+                      }, 500 + (100 * index)); // Start right side a bit later
+                    });
                   }
                   
                   // Release scroll hijacking
