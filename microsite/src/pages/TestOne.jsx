@@ -255,7 +255,11 @@ const TestOne = () => {
       {/* For Supers & Foremen Section */}
       <section style={{ padding: isMobile ? '40px 20px' : '80px 0', background: '#0A0A0A' }}>
         <div className="container">
-          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          <div style={{ 
+              maxWidth: '1000px', 
+              margin: '0 auto',
+              border: '2px solid orange' // Added border to visualize parent container
+            }}>
             <h2 style={{ 
               fontSize: isMobile ? '24px' : '28px', 
               fontWeight: '600', 
@@ -277,93 +281,453 @@ const TestOne = () => {
               When you're out in the work, every step matters. Every click too. Construct was designed to help production crews and QC teams navigate the site, capture issues instantly, and close them out — no paperwork, no desktop, no BS.
             </p>
             
-            {/* Comparison graphics with arrow using img tags */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '30px',
-              margin: '30px auto 40px',
-              flexWrap: isMobile ? 'wrap' : 'nowrap'
-            }}>
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center'
-              }}>
-                <img 
-                  src="/assets/photos/inspection_notebook.png" 
-                  alt="Traditional paper notebook"
-                  style={{
-                    width: isMobile ? '140px' : '500px',
-                    height: 'auto',
-                    objectFit: 'contain',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-                    marginBottom: '10px'
-                  }}
-                />
-                <p style={{
+            {/* Scroll Story Animation Container */}
+            <div 
+              style={{
+                position: 'relative',
+                height: isMobile ? '350px' : '450px', // Reduced height to decrease vertical padding
+                margin: '20px auto', // Reduced top/bottom margin from 40px to 20px
+                width: '100%',
+                maxWidth: '1000px', // Matched to parent container width
+                border: '2px solid red', // Added debug border
+                background: 'rgba(255,0,0,0.05)' // Added debug background
+              }}
+              ref={el => {
+                if (!el) return;
+                
+                // Animation states
+                let animationState = 'waiting'; // 'waiting', 'fadeOutNotebook', 'fadeInList', 'completed'
+                let scrollY = 0;
+                let isScrollHijacked = false;
+                let animationProgress = 0;
+                let startTime;
+                
+                // Duration settings in milliseconds
+                const fadeOutDuration = 400;
+                const blackScreenDuration = 400;
+                const fadeInDuration = 400;
+                
+                // Elements
+                const notebookImage = el.querySelector('.notebook-image');
+                const listImage = el.querySelector('.list-image');
+                
+                // Function to handle scrolling
+                const handleScroll = () => {
+                  if (animationState === 'completed') return;
+                  
+                  const rect = el.getBoundingClientRect();
+                  const triggerPosition = window.innerHeight * 0.2; // Reduced from 0.3 to 0.2 to trigger later
+                  
+                  // Check if element has reached trigger position and animation hasn't started
+                  if (animationState === 'waiting' && rect.top <= triggerPosition) {
+                    // Save current scroll position
+                    scrollY = window.scrollY;
+                    
+                    // Start the animation sequence
+                    startAnimation();
+                  }
+                };
+                
+                // Function to start the animation
+                const startAnimation = () => {
+                  // Enable scroll hijacking
+                  isScrollHijacked = true;
+                  document.body.style.overflow = 'hidden';
+                  
+                  // Start animation
+                  animationState = 'fadeOutNotebook';
+                  startTime = performance.now();
+                  requestAnimationFrame(animationFrame);
+                };
+                
+                // Animation frame handler
+                const animationFrame = (timestamp) => {
+                  if (!startTime) startTime = timestamp;
+                  const elapsed = timestamp - startTime;
+                  
+                  // Handle different animation states
+                  if (animationState === 'fadeOutNotebook') {
+                    // Notebook fade out animation
+                    animationProgress = Math.min(1, elapsed / fadeOutDuration);
+                    notebookImage.style.opacity = 1 - animationProgress;
+                    
+                    // Move to next state after fadeOut completes
+                    if (animationProgress === 1) {
+                      animationState = 'fadeInList';
+                      startTime = timestamp;
+                    }
+                    
+                    requestAnimationFrame(animationFrame);
+                  } 
+                  else if (animationState === 'fadeInList') {
+                    // Wait for black screen duration, then start fadeIn
+                    if (elapsed < blackScreenDuration) {
+                      requestAnimationFrame(animationFrame);
+                      return;
+                    }
+                    
+                    // List fade in animation
+                    const fadeInElapsed = elapsed - blackScreenDuration;
+                    animationProgress = Math.min(1, fadeInElapsed / fadeInDuration);
+                    listImage.style.opacity = animationProgress;
+                    
+                    // Complete animation
+                    if (animationProgress === 1) {
+                      completeAnimation();
+                    } else {
+                      requestAnimationFrame(animationFrame);
+                    }
+                  }
+                };
+                
+                // Function to complete animation and restore scrolling
+                const completeAnimation = () => {
+                  animationState = 'completed';
+                  notebookImage.style.opacity = 0;
+                  listImage.style.opacity = 1;
+                  
+                  // Show the feature columns
+                  const leftFeatures = el.querySelector('.left-features');
+                  const rightFeatures = el.querySelector('.right-features');
+                  
+                  if (leftFeatures && rightFeatures) {
+                    // Make the containers visible
+                    leftFeatures.style.opacity = '1';
+                    rightFeatures.style.opacity = '1';
+                    
+                    // Animation for each feature will be handled by the existing
+                    // IntersectionObserver in the component
+                  }
+                  
+                  // Release scroll hijacking
+                  isScrollHijacked = false;
+                  document.body.style.overflow = '';
+                };
+                
+                // Prevent scroll during animation
+                const preventScroll = (e) => {
+                  if (isScrollHijacked) {
+                    window.scrollTo(0, scrollY);
+                  }
+                };
+                
+                // Add event listeners
+                window.addEventListener('scroll', handleScroll);
+                window.addEventListener('scroll', preventScroll);
+                
+                // Clean up
+                return () => {
+                  window.removeEventListener('scroll', handleScroll);
+                  window.removeEventListener('scroll', preventScroll);
+                  document.body.style.overflow = '';
+                };
+              }}
+            >
+              {/* Notebook image (starts visible) */}
+              <img 
+                className="notebook-image"
+                src="/assets/photos/inspection_notebook.png" 
+                alt="Traditional paper notebook"
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: isMobile ? '480px' : isTablet ? '580px' : '600px',
+                  height: 'auto',
+                  maxHeight: isMobile ? '340px' : '440px', // Reduced max height to fit in smaller container
+                  objectFit: 'contain',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                  opacity: 1,
+                  transition: 'opacity 0.3s ease',
+                  border: '2px solid yellow' // Added debug border
+                }}
+              />
+              
+              {/* List image (starts invisible) */}
+              <img 
+                className="list-image"
+                src="/assets/screenshots/List.jpeg" 
+                alt="Digital task list in Construct app"
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: isMobile ? '200px' : isTablet ? '220px' : '240px',
+                  height: 'auto',
+                  maxHeight: isMobile ? '340px' : '440px', // Reduced max height to fit in smaller container
+                  objectFit: 'contain',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                  opacity: 0,
+                  transition: 'opacity 0.3s ease',
+                  border: '2px solid green' // Added debug border
+                }}
+              />
+              
+              {/* Left column features */}
+              <ul 
+                className="left-features"
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  right: isMobile ? '80%' : isTablet ? '75%' : '70%',
+                  transform: 'translateY(-50%)',
+                  listStyleType: 'none',
+                  padding: 0,
+                  margin: 0,
+                  textAlign: 'right',
+                  width: isMobile ? '180px' : isTablet ? '220px' : '260px',
+                  opacity: 0,
+                  pointerEvents: 'none', // Don't interfere with scroll events
+                  border: '2px solid blue', // Added debug border
+                  background: 'rgba(0,0,255,0.1)' // Added debug background
+                }}
+                ref={addToRefs} // Use existing animation system
+              >
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
-                  color: '#888',
-                  textAlign: 'center',
-                  maxWidth: isMobile ? '140px' : '500px'
-                }}>
-                  Traditional paper inspections
-                </p>
-              </div>
-              
-              {!isMobile && (
-                <img 
-                  src="/assets/icons/Arrow.png" 
-                  alt="Arrow" 
-                  style={{
-                    width: '80px',
-                    height: '48px',
-                    objectFit: 'contain'
-                  }}
-                />
-              )}
-              
-              {isMobile && (
-                <img 
-                  src="/assets/icons/Arrow.png" 
-                  alt="Arrow" 
-                  style={{
-                    width: '48px',
-                    height: '80px',
-                    objectFit: 'contain',
-                    margin: '10px 0'
-                  }}
-                />
-              )}
-              
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center'
-              }}>
-                <img 
-                  src="/assets/screenshots/List.jpeg" 
-                  alt="Digital task list in Construct app"
-                  style={{
-                    width: isMobile ? '140px' : '200px',
-                    height: 'auto',
-                    objectFit: 'contain',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-                    marginBottom: '10px'
-                  }}
-                />
-                <p style={{
+                  color: '#aab7c4',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>GIS-based Map</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
-                  color: '#888',
-                  textAlign: 'center',
-                  maxWidth: isMobile ? '140px' : '200px'
-                }}>
-                  Digital tracking in Construct
-                </p>
-              </div>
+                  color: '#aab7c4',
+                  transitionDelay: '0.05s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>Pin Observations on Elements</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  transitionDelay: '0.1s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>Inspection Checklists</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  transitionDelay: '0.15s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>Create Non-Compliance Records</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  transitionDelay: '0.2s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>Assign and Notify QC Issues</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  transitionDelay: '0.25s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>Add Due Dates</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  transitionDelay: '0.3s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>GPS Navigation</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  transitionDelay: '0.35s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>Manage Status Changes</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  transitionDelay: '0.4s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>Audit Logs</li>
+                <li style={{ 
+                  marginBottom: '0', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  transitionDelay: '0.45s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>Role-based Data Access</li>
+              </ul>
+              
+              {/* Right column features */}
+              <ul
+                className="right-features"
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: isMobile ? '80%' : isTablet ? '75%' : '70%',
+                  transform: 'translateY(-50%)',
+                  listStyleType: 'none',
+                  padding: 0,
+                  margin: 0,
+                  textAlign: 'left',
+                  width: isMobile ? '180px' : isTablet ? '220px' : '260px',
+                  opacity: 0,
+                  pointerEvents: 'none', // Don't interfere with scroll events
+                  border: '2px solid purple', // Added debug border
+                  background: 'rgba(128,0,128,0.1)' // Added debug background
+                }}
+                ref={addToRefs} // Use existing animation system
+              >
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>Web and Mobile Apps</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  transitionDelay: '0.05s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>Offline Mode</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  transitionDelay: '0.1s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>Procore Integration</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  transitionDelay: '0.15s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>Performance Tracking</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  transitionDelay: '0.2s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>KPI Dashboards</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  transitionDelay: '0.25s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>Export and Send Punchlists</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  transitionDelay: '0.3s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>In-app and Email Notifications</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  transitionDelay: '0.35s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>1-Click Assigned-to-me View</li>
+                <li style={{ 
+                  marginBottom: '8px', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  transitionDelay: '0.4s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>Search QC Issues</li>
+                <li style={{ 
+                  marginBottom: '0', 
+                  opacity: '0', 
+                  transform: 'translateY(15px)', 
+                  transition: 'opacity 0.5s ease, transform 0.5s ease',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#aab7c4',
+                  transitionDelay: '0.45s',
+                  whiteSpace: 'nowrap',
+                  letterSpacing: '0.5px'
+                }}>Unlimited Users</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -1170,104 +1534,10 @@ const TestOne = () => {
               100% { transform: translateX(calc(-200px * 4 - 60px * 4)); }
             }
           `
-        }} />
+        }}></style>
       </section>
-
-      {/* Stay in the Loop Section */}
-      <section style={{ 
-        padding: isMobile ? '60px 20px' : '100px 0', 
-        background: 'linear-gradient(to bottom, #000, #111)',
-        borderTop: '1px solid rgba(255,255,255,0.05)'
-      }}>
-        <div className="container" style={{ textAlign: 'center' }}>
-          <div style={{ 
-            maxWidth: isMobile ? '100%' : '800px', 
-            margin: '0 auto',
-            padding: isMobile ? '30px 20px' : '40px',
-            background: 'rgba(255,255,255,0.02)',
-            borderRadius: '16px',
-            border: '1px solid rgba(255,255,255,0.05)'
-          }}>
-            <h2 style={{ 
-              fontSize: isMobile ? '28px' : '36px', 
-              marginBottom: '24px',
-              background: 'linear-gradient(to right, var(--color-light-blue), var(--color-secondary))',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
-            }}>
-              Stay in the Loop
-            </h2>
-            <p style={{ 
-              fontSize: isMobile ? '16px' : '18px', 
-              color: '#999', 
-              marginBottom: '40px',
-              maxWidth: '600px',
-              margin: '0 auto 40px'
-            }}>
-              We're just getting started. Drop your email and we'll send you updates on new features, field stories, and lessons in First Time Quality.
-            </p>
-            <div style={{ 
-              display: 'flex', 
-              flexDirection: isMobile ? 'column' : 'row',
-              maxWidth: '500px', 
-              margin: '0 auto'
-            }}>
-              <input 
-                type="email" 
-                placeholder="Your email address" 
-                style={{
-                  flex: '1',
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  borderRadius: isMobile ? '8px' : '8px 0 0 8px',
-                  padding: '16px',
-                  color: 'white',
-                  fontSize: '16px',
-                  marginBottom: isMobile ? '10px' : '0'
-                }}
-              />
-              <button style={{
-                background: 'var(--color-secondary)',
-                color: '#fff',
-                border: 'none',
-                padding: '16px 24px',
-                borderRadius: isMobile ? '8px' : '0 8px 8px 0',
-                fontSize: '16px',
-                fontWeight: '500',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-              }}>
-                Subscribe
-              </button>
-            </div>
-            <p style={{ fontSize: '14px', color: '#666', marginTop: '16px' }}>
-              We'll only send quarterly updates. Your email stays private.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer style={{ padding: isMobile ? '30px 20px' : '40px 0', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div className="container">
-          <div style={{ 
-            display: 'flex', 
-            flexDirection: isMobile ? 'column' : 'row',
-            justifyContent: 'space-between', 
-            alignItems: isMobile ? 'center' : 'center',
-            gap: isMobile ? '20px' : '0'
-          }}>
-            <p style={{ color: '#666' }}>© 2023 Construct. All rights reserved.</p>
-            <div style={{ display: 'flex', gap: '24px' }}>
-              <a href="#" style={{ color: '#666', textDecoration: 'none' }}>Privacy</a>
-              <a href="#" style={{ color: '#666', textDecoration: 'none' }}>Terms</a>
-              <a href="#" style={{ color: '#666', textDecoration: 'none' }}>Contact</a>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
 
-export default TestOne; 
+export default TestOne;
