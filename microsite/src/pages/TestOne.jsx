@@ -689,7 +689,7 @@ const TestOne = () => {
               marginBottom: '26px', 
               color: '#fff'
             }}>
-              Construct QC: See the Job, Not Just the List
+              See the Job, Not Just the List
             </h2>
             <ul ref={addToRefs} style={{ 
               color: '#ccc', 
@@ -713,9 +713,15 @@ const TestOne = () => {
                 maxWidth: '180px'
               }}>
                 <div style={{ marginBottom: '10px', fontSize: '24px', color: 'white' }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
-                  </svg>
+                  <img 
+                    src="/assets/icons/pin.png" 
+                    alt="Map pin icon" 
+                    style={{ 
+                      width: '30px', 
+                      height: '30px',
+                      margin: '0 auto'
+                    }} 
+                  />
                 </div>
                 Map-based interface with every QC activity pinned
               </li>
@@ -730,9 +736,15 @@ const TestOne = () => {
                 maxWidth: '180px'
               }}>
                 <div style={{ marginBottom: '10px', fontSize: '24px', color: 'white' }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976a8 8 0 0 1 1.125.34zm1.69.946a7 7 0 0 0-.831-.575l.446-.894a8 8 0 0 1 .953.654l-.532.815zm1.448 1.327a7 7 0 0 0-.594-.77l.656-.76a8 8 0 0 1 .681.892l-.733.629zm1.13 1.696a7 7 0 0 0-.313-.9l.84-.548a8 8 0 0 1 .359 1.004l-.872.44zm.578 2.07a7 7 0 0 0-.032-.97l.977-.082a8 8 0 0 1 .036 1.107l-.982-.055zm-.126 2.138a7 7 0 0 0 .234-.94l.949.206a8 8 0 0 1-.268 1.072l-.916-.34zm-.726 1.953a7 7 0 0 0 .478-.838l.83.501a8 8 0 0 1-.547.954l-.761-.611zm-1.24 1.667a7 7 0 0 0 .695-.656l.648.773a8 8 0 0 1-.796.748l-.543-.866zm-1.66 1.213a7 7 0 0 0 .867-.409l.41.905a8 8 0 0 1-.992.466l-.28-.96zm-2.024.644a7 7 0 0 0 .955-.121l.136.975a8 8 0 0 1-1.09.139l-.001-.994zm-2.143-.046a7 7 0 0 0 .966.129l-.13.975a8 8 0 0 1-1.105-.147l.269-.958zm-1.912-.412a7 7 0 0 0 .871.412l-.285.957a8 8 0 0 1-.996-.47l.412-.893zm-1.612-.915a7 7 0 0 0 .7.663l-.549.862a8 8 0 0 1-.8-.757l.651-.764zm-1.187-1.312a7 7 0 0 0 .48.84l-.764.607a8 8 0 0 1-.55-.955l.833-.493zm-.694-1.585a7 7 0 0 0 .236.941l-.914.345a8 8 0 0 1-.27-1.075l.948-.213zm-.201-1.821a7 7 0 0 0-.034.972l-.98.061a8 8 0 0 1 .037-1.111l.977.08zm.112-1.757a7 7 0 0 0-.312.902l-.872-.432a8 8 0 0 1 .357-1.007l.826.535zm.504-1.445a7 7 0 0 0-.593.775l-.737-.622a8 8 0 0 1 .678-.896l.649.74zm.914-1.224a7 7 0 0 0-.83.583l-.54-.808a8 8 0 0 1 .95-.66l.417.883zm1.291-.927a7 7 0 0 0-.983.307l-.293-.961a8 8 0 0 1 1.123-.35l.153 1.003zm1.577-.54A7 7 0 0 0 8 .79l.002-1a8 8 0 0 1 .586.078l-.086.952zm3.334.142a7 7 0 0 0-1.494-.28l.105-.997a8 8 0 0 1 1.706.32l-.317.957zM8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
-                  </svg>
+                  <img 
+                    src="/assets/icons/history.png" 
+                    alt="History icon" 
+                    style={{ 
+                      width: '30px', 
+                      height: '30px',
+                      margin: '0 auto'
+                    }} 
+                  />
                 </div>
                 Historical record of activities
               </li>
@@ -747,10 +759,15 @@ const TestOne = () => {
                 maxWidth: '180px'
               }}>
                 <div style={{ marginBottom: '10px', fontSize: '24px', color: 'white' }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8 16.016a7.5 7.5 0 0 0 1.962-14.74A1 1 0 0 0 9 0H7a1 1 0 0 0-.962 1.276A7.5 7.5 0 0 0 8 16.016m6.5-7.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0"/>
-                    <path d="m6.94 7.44 4.95-2.83-2.83 4.95-4.949 2.83z"/>
-                  </svg>
+                  <img 
+                    src="/assets/icons/findme.png" 
+                    alt="Navigation icon" 
+                    style={{ 
+                      width: '30px', 
+                      height: '30px',
+                      margin: '0 auto'
+                    }} 
+                  />
                 </div>
                 Built-in navigation to find work on site
               </li>
