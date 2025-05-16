@@ -258,7 +258,7 @@ const TestOne = () => {
           <div style={{ 
               maxWidth: '1000px', 
               margin: '0 auto',
-              border: '2px solid orange' // Added border to visualize parent container
+              border: 'none'
             }}>
             <h2 style={{ 
               fontSize: isMobile ? '24px' : '28px', 
@@ -289,8 +289,8 @@ const TestOne = () => {
                 margin: '20px auto', // Reduced top/bottom margin from 40px to 20px
                 width: '100%',
                 maxWidth: '1000px', // Matched to parent container width
-                border: '2px solid red', // Added debug border
-                background: 'rgba(255,0,0,0.05)' // Added debug background
+                border: 'none',
+                background: 'transparent'
               }}
               ref={el => {
                 if (!el) return;
@@ -441,7 +441,7 @@ const TestOne = () => {
                   boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
                   opacity: 1,
                   transition: 'opacity 0.3s ease',
-                  border: '2px solid yellow' // Added debug border
+                  border: 'none'
                 }}
               />
               
@@ -463,7 +463,7 @@ const TestOne = () => {
                   boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
                   opacity: 0,
                   transition: 'opacity 0.3s ease',
-                  border: '2px solid green' // Added debug border
+                  border: 'none'
                 }}
               />
               
@@ -473,7 +473,7 @@ const TestOne = () => {
                 style={{
                   position: 'absolute',
                   top: '50%',
-                  right: isMobile ? '80%' : isTablet ? '75%' : '70%',
+                  right: isMobile ? '65%' : isTablet ? '65%' : '70%',
                   transform: 'translateY(-50%)',
                   listStyleType: 'none',
                   padding: 0,
@@ -482,8 +482,8 @@ const TestOne = () => {
                   width: isMobile ? '180px' : isTablet ? '220px' : '260px',
                   opacity: 0,
                   pointerEvents: 'none', // Don't interfere with scroll events
-                  border: '2px solid blue', // Added debug border
-                  background: 'rgba(0,0,255,0.1)' // Added debug background
+                  border: 'none',
+                  background: 'transparent'
                 }}
                 ref={addToRefs} // Use existing animation system
               >
@@ -604,7 +604,7 @@ const TestOne = () => {
                 style={{
                   position: 'absolute',
                   top: '50%',
-                  left: isMobile ? '80%' : isTablet ? '75%' : '70%',
+                  left: isMobile ? '65%' : isTablet ? '65%' : '70%',
                   transform: 'translateY(-50%)',
                   listStyleType: 'none',
                   padding: 0,
@@ -613,8 +613,8 @@ const TestOne = () => {
                   width: isMobile ? '180px' : isTablet ? '220px' : '260px',
                   opacity: 0,
                   pointerEvents: 'none', // Don't interfere with scroll events
-                  border: '2px solid purple', // Added debug border
-                  background: 'rgba(128,0,128,0.1)' // Added debug background
+                  border: 'none',
+                  background: 'transparent'
                 }}
                 ref={addToRefs} // Use existing animation system
               >
