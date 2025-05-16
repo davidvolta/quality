@@ -203,7 +203,7 @@ const TestOne = () => {
                 marginBottom: '40px',
                 textShadow: '0 1px 3px rgba(0,0,0,0.3)'
               }}>
-                An easy-to-use field app, purpose built for large-scale solar.
+                An easy-to-use, completely digital QC workflow purpose built for large-scale solar.
               </p>
               
               <div style={{ 
@@ -255,100 +255,115 @@ const TestOne = () => {
       {/* For Supers & Foremen Section */}
       <section style={{ padding: isMobile ? '40px 20px' : '80px 0', background: '#0A0A0A' }}>
         <div className="container">
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', 
-            gap: '40px', 
-            alignItems: 'center' 
-          }}>
-            <div>
-              <h2 style={{ 
-                fontSize: isMobile ? '24px' : '28px', 
-                fontWeight: '600', 
-                marginBottom: '24px', 
-                color: '#fff',
-                textAlign: isMobile ? 'center' : 'left'
-              }}>
-                Get it Right the First Time
-              </h2>
-              <p style={{ fontSize: isMobile ? '16px' : '18px', color: '#999', marginBottom: '24px', lineHeight: '1.6' }}>
-                When you're out in the work, every step matters. Every click too. Construct was designed to help production crews and QC teams navigate the site, capture issues instantly, and close them out — no paperwork, no desktop, no BS.
-              </p>
-              <ul ref={addToRefs} style={{ color: '#999', fontSize: isMobile ? '14px' : '16px', paddingLeft: '20px', marginBottom: '24px' }}>
-                <li style={{ 
-                  marginBottom: '8px', 
-                  opacity: '0', 
-                  transform: 'translateY(20px)', 
-                  transition: 'opacity 0.5s ease, transform 0.5s ease' 
-                }}>Log issues with GPS-precision from your phone</li>
-                <li style={{ 
-                  marginBottom: '8px', 
-                  opacity: '0', 
-                  transform: 'translateY(20px)', 
-                  transition: 'opacity 0.5s ease, transform 0.5s ease' 
-                }}>Create punchlists that get acted on, not ignored</li>
-                <li style={{ 
-                  marginBottom: '8px', 
-                  opacity: '0', 
-                  transform: 'translateY(20px)', 
-                  transition: 'opacity 0.5s ease, transform 0.5s ease' 
-                }}>Works offline, in the sun, on your terms</li>
-              </ul>
-            </div>
-            <div style={{ 
-              width: '100%', 
+          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            <h2 style={{ 
+              fontSize: isMobile ? '24px' : '28px', 
+              fontWeight: '600', 
+              marginBottom: '24px', 
+              color: '#fff',
+              textAlign: 'center'
+            }}>
+              Get it Right the First Time
+            </h2>
+            <p style={{ 
+              fontSize: isMobile ? '16px' : '18px', 
+              color: '#999', 
+              marginBottom: '30px', 
+              lineHeight: '1.6', 
+              textAlign: 'center',
+              maxWidth: '800px',
+              margin: '0 auto 30px'
+            }}>
+              When you're out in the work, every step matters. Every click too. Construct was designed to help production crews and QC teams navigate the site, capture issues instantly, and close them out — no paperwork, no desktop, no BS.
+            </p>
+            
+            {/* Comparison graphics with arrow using img tags */}
+            <div style={{
               display: 'flex',
-              flexDirection: 'column',
               alignItems: 'center',
-              gap: '15px',
-              height: 'auto', 
-              backgroundColor: 'transparent',
-              border: 'none',
-              order: isMobile ? '-1' : '0',
-              opacity: '0',
-              transform: 'translateY(40px)',
-              transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
-            }} ref={addToImageRefs}>
+              justifyContent: 'center',
+              gap: '30px',
+              margin: '30px auto 40px',
+              flexWrap: isMobile ? 'wrap' : 'nowrap'
+            }}>
               <div style={{
-                width: '300px',
-                height: '150px',
-                backgroundImage: 'url("/assets/screenshots/1-1.png")',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                borderRadius: '6px',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-              }}></div>
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
+              }}>
+                <img 
+                  src="/assets/photos/inspection_notebook.png" 
+                  alt="Traditional paper notebook"
+                  style={{
+                    width: isMobile ? '140px' : '500px',
+                    height: 'auto',
+                    objectFit: 'contain',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                    marginBottom: '10px'
+                  }}
+                />
+                <p style={{
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#888',
+                  textAlign: 'center',
+                  maxWidth: isMobile ? '140px' : '500px'
+                }}>
+                  Traditional paper inspections
+                </p>
+              </div>
+              
+              {!isMobile && (
+                <img 
+                  src="/assets/icons/Arrow.png" 
+                  alt="Arrow" 
+                  style={{
+                    width: '80px',
+                    height: '48px',
+                    objectFit: 'contain'
+                  }}
+                />
+              )}
+              
+              {isMobile && (
+                <img 
+                  src="/assets/icons/Arrow.png" 
+                  alt="Arrow" 
+                  style={{
+                    width: '48px',
+                    height: '80px',
+                    objectFit: 'contain',
+                    margin: '10px 0'
+                  }}
+                />
+              )}
+              
               <div style={{
-                width: '300px',
-                height: '150px',
-                backgroundImage: 'url("/assets/screenshots/2-1.png")',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                borderRadius: '6px',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-              }}></div>
-              <div style={{
-                width: '300px',
-                height: '150px',
-                backgroundImage: 'url("/assets/screenshots/2-2.png")',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                borderRadius: '6px',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-              }}></div>
-              <div style={{
-                width: '300px',
-                height: '150px',
-                backgroundImage: 'url("/assets/screenshots/2-3.png")',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                borderRadius: '6px',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-              }}></div>
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
+              }}>
+                <img 
+                  src="/assets/screenshots/List.jpeg" 
+                  alt="Digital task list in Construct app"
+                  style={{
+                    width: isMobile ? '140px' : '200px',
+                    height: 'auto',
+                    objectFit: 'contain',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                    marginBottom: '10px'
+                  }}
+                />
+                <p style={{
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#888',
+                  textAlign: 'center',
+                  maxWidth: isMobile ? '140px' : '200px'
+                }}>
+                  Digital tracking in Construct
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -478,11 +493,11 @@ const TestOne = () => {
               }}>
                 <CircleProgress percentage={40} color="#50B8E2" size={isMobile ? 200 : 300} />
                 <p style={{
-                  fontFamily: 'Chivo, sans-serif',
-                  fontSize: isMobile ? '14px' : '16px',
-                  color: '#999',
+                  fontSize: isMobile ? '12px' : '14px',
+                  color: '#888',
                   marginTop: '20px',
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  maxWidth: isMobile ? '140px' : '300px'
                 }}>
                   Amount of site injuries associated with rework
                 </p>
@@ -757,9 +772,9 @@ const TestOne = () => {
               />
             </div>
             <h2 style={{ 
-              fontSize: isMobile ? '24px' : '32px', 
+              fontSize: isMobile ? '32px' : '42px', 
               fontWeight: '600', 
-              marginBottom: '26px', 
+              marginBottom: '24px', 
               color: '#fff'
             }}>
               See the Job, Not Just the List
