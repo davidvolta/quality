@@ -285,7 +285,7 @@ const TestOne = () => {
             <div 
               style={{
                 position: 'relative',
-                height: isMobile ? '350px' : '450px', // Reduced height to decrease vertical padding
+                height: isMobile ? '450px' : '600px', // Increased height from 350px/450px to 450px/600px
                 margin: '20px auto', // Reduced top/bottom margin from 40px to 20px
                 width: '100%',
                 maxWidth: '1000px', // Matched to parent container width
@@ -435,7 +435,7 @@ const TestOne = () => {
                   transform: 'translate(-50%, -50%)',
                   width: isMobile ? '480px' : isTablet ? '580px' : '600px',
                   height: 'auto',
-                  maxHeight: isMobile ? '340px' : '440px', // Reduced max height to fit in smaller container
+                  maxHeight: isMobile ? '420px' : '550px', // Increased from 340px/440px
                   objectFit: 'contain',
                   borderRadius: '8px',
                   boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
@@ -455,12 +455,12 @@ const TestOne = () => {
                   top: '50%',
                   left: '50%',
                   transform: 'translate(-50%, -50%)',
-                  width: isMobile ? '200px' : isTablet ? '220px' : '240px',
-                  height: 'auto',
-                  maxHeight: isMobile ? '340px' : '440px', // Reduced max height to fit in smaller container
-                  objectFit: 'contain',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                  width: 'auto',
+                  height: isMobile ? '380px' : isTablet ? '480px' : '520px',
+                  maxWidth: '100%',
+                  objectFit: 'cover',
+                  borderRadius: '24px',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
                   opacity: 0,
                   transition: 'opacity 0.3s ease',
                   border: '2px solid green' // Added debug border
