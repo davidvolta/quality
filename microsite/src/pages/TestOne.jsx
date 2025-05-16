@@ -145,7 +145,8 @@ const TestOne = () => {
             position: 'relative',
             paddingLeft: '0',
             maxWidth: '1200px',
-            margin: isMobile ? '0 20px' : '0 auto'
+            margin: '0',
+            marginRight: isMobile ? '20px' : 'auto'
           }}>
             {/* Image container with responsive styling */}
             <div style={{ 
@@ -156,8 +157,7 @@ const TestOne = () => {
               backgroundPosition: isMobile ? 'center' : 'left',
               backgroundRepeat: 'no-repeat',
               float: isMobile ? 'none' : 'left',
-              marginBottom: isMobile ? '20px' : '0',
-              border: 'none'
+              marginBottom: isMobile ? '20px' : '0'
             }}></div>
             
             {/* Text container with responsive positioning */}
@@ -165,9 +165,16 @@ const TestOne = () => {
               marginLeft: isMobile ? '0' : '45%', 
               paddingTop: isMobile ? '0' : '50px',
               maxWidth: isMobile ? '100%' : '600px',
-              textAlign: isMobile ? 'center' : 'left'
+              textAlign: isMobile || isTablet ? 'center' : 'left',
+              margin: isMobile || isTablet ? '0 auto' : '0 0 0 45%',
+              paddingLeft: isMobile || isTablet ? '20px' : '0',
+              paddingRight: isMobile || isTablet ? '20px' : '0'
             }}>
-              <div style={{ marginBottom: '40px' }}>
+              <div style={{ 
+                marginBottom: '40px',
+                display: 'flex',
+                justifyContent: isMobile || isTablet ? 'center' : 'flex-start'
+              }}>
                 <img 
                   src="/assets/logos/TerabaseConstructLogo.png" 
                   alt="Terabase Construct" 
@@ -180,14 +187,14 @@ const TestOne = () => {
                 />
               </div>
               <h1 style={{ 
-                fontSize: isMobile ? '42px' : isTablet ? '56px' : '72px', 
+                fontSize: isMobile ? '42px' : isTablet ? '48px' : '72px',
                 fontWeight: '600', 
                 lineHeight: '1.1', 
                 marginBottom: '24px',
                 color: '#fff',
                 textShadow: '0 2px 4px rgba(0,0,0,0.3)'
               }}>
-                The Front-End App for Quality Control
+                QC That Keeps the Job Moving
               </h1>
               <p style={{ 
                 fontSize: isMobile ? '18px' : '22px', 
@@ -196,11 +203,17 @@ const TestOne = () => {
                 marginBottom: '40px',
                 textShadow: '0 1px 3px rgba(0,0,0,0.3)'
               }}>
-                An app purpose built for large scale solar – from the trailer to the field.
+                An easy-to-use field app, purpose built for large-scale solar.
               </p>
               
-              <div style={{ display: 'flex', justifyContent: isMobile ? 'center' : 'flex-start', gap: '16px' }}>
-                <a href="https://apps.apple.com/us/app/construct-qc/id1552435031" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block' }}>
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: isMobile ? 'center' : 'flex-start', 
+                gap: '16px'
+              }}>
+                <a href="https://apps.apple.com/us/app/construct-qc/id1552435031" target="_blank" rel="noopener noreferrer" style={{ 
+                  display: 'inline-block'
+                }}>
                   <img 
                     src="/assets/badges/apple.png" 
                     alt="Download on App Store" 
@@ -214,7 +227,9 @@ const TestOne = () => {
                     onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
                   />
                 </a>
-                <a href="https://play.google.com/store/apps/details?id=com.terabase.inspect" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block' }}>
+                <a href="https://play.google.com/store/apps/details?id=com.terabase.inspect" target="_blank" rel="noopener noreferrer" style={{ 
+                  display: 'inline-block'
+                }}>
                   <img 
                     src="/assets/badges/google.png" 
                     alt="Get it on Google Play" 
@@ -230,7 +245,9 @@ const TestOne = () => {
                 </a>
               </div>
             </div>
-            <div style={{ clear: 'both' }}></div>
+            <div style={{ 
+              clear: 'both'
+            }}></div>
           </div>
         </div>
       </section>
@@ -255,7 +272,7 @@ const TestOne = () => {
                 Get it Right the First Time
               </h2>
               <p style={{ fontSize: isMobile ? '16px' : '18px', color: '#999', marginBottom: '24px', lineHeight: '1.6' }}>
-                When you're out in the work, every step matters. Construct helps you walk the site, spot issues, log them instantly, and close them out — no paperwork, no desktop, no BS. It's quality assurance that fits in your pocket.
+                When you're out in the work, every step matters. Every click too. Construct was designed to help production crews and QC teams navigate the site, capture issues instantly, and close them out — no paperwork, no desktop, no BS.
               </p>
               <ul ref={addToRefs} style={{ color: '#999', fontSize: isMobile ? '14px' : '16px', paddingLeft: '20px', marginBottom: '24px' }}>
                 <li style={{ 
@@ -982,7 +999,7 @@ const TestOne = () => {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'center' }}>
             <div>
               <h2 style={{ fontSize: '28px', fontWeight: '600', marginBottom: '24px', color: '#fff' }}>
-                Construct+ (Coming Soon): The future of real-time QA
+                Construct+: The Future of Real-time QA
               </h2>
               <p style={{ fontSize: '18px', color: '#999', marginBottom: '24px', lineHeight: '1.6' }}>
                 We're piloting new ways to automate QC using AI, robotics, and aerial capture. From drone imagery to sensor-based scans, Construct+ is building the future of field data — with less manual input, more real-time insight.
@@ -1022,6 +1039,123 @@ const TestOne = () => {
             }} ref={addToImageRefs}></div>
           </div>
         </div>
+      </section>
+
+      {/* Customer Logos Section - Auto-animating Carousel */}
+      <section style={{ 
+        padding: isMobile ? '60px 20px' : '80px 0', 
+        background: '#000',
+        borderTop: '1px solid rgba(255,255,255,0.05)'
+      }}>
+        <div className="container">
+          <h2 style={{ 
+            fontSize: isMobile ? '24px' : '28px', 
+            fontWeight: '600', 
+            marginBottom: '40px', 
+            color: '#fff',
+            textAlign: 'center' 
+          }}>
+            Proven in the Field, Backed by the Best
+          </h2>
+          
+          <p style={{ 
+            fontSize: isMobile ? '16px' : '18px', 
+            color: '#999', 
+            marginBottom: '30px', 
+            maxWidth: '700px',
+            margin: '0 auto 40px',
+            textAlign: 'center',
+            lineHeight: '1.6'
+          }}>
+            Top EPCs and developers use Construct QC to raise the bar on quality and safety.
+          </p>
+          
+          <div style={{ 
+            position: 'relative',
+            maxWidth: '100%',
+            overflow: 'hidden'
+          }}>
+            {/* Auto-scrolling carousel with inline styles */}
+            <div style={{
+              display: 'flex',
+              padding: '20px 0',
+              gap: '60px',
+              width: 'fit-content',
+              animation: 'scrollLogos 18s cubic-bezier(0.45, 0, 0.55, 1) infinite',
+              animationDirection: 'alternate'
+            }}>
+              {/* First set of 8 logos */}
+              {[
+                { name: 'EDP', file: 'EDP.png' },
+                { name: 'Leeward', file: 'Leeward.png' },
+                { name: 'IP', file: 'IP.png' },
+                { name: 'LSBP', file: 'LSBP.png' },
+                { name: 'MCC', file: 'MCC.png' },
+                { name: 'Mastec', file: 'Mastec.png' },
+                { name: 'NGR', file: 'NGR.png' },
+                { name: 'SB', file: 'SB.png' }
+              ].map((company, index) => (
+                <div key={`customer-${index}`} style={{ 
+                  width: isMobile ? '140px' : '200px', 
+                  height: '140px',
+                  flexShrink: 0,
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  background: 'rgba(255,255,255,0.05)',
+                  borderRadius: '8px'
+                }}>
+                  <img 
+                    src={`/assets/logos/companies/${company.file}`}
+                    alt={`${company.name} Logo`}
+                    style={{ 
+                      width: isMobile ? '110px' : '200px',
+                      height: 'auto',
+                      maxHeight: '140px',
+                      objectFit: 'contain',
+                      opacity: 0.8
+                    }}
+                    onMouseOver={(e) => e.target.style.opacity = '1'}
+                    onMouseLeave={(e) => e.target.style.opacity = '0.8'}
+                  />
+                </div>
+              ))}
+            </div>
+            
+            {/* Gradient overlays on sides */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100px',
+              height: '100%',
+              background: 'linear-gradient(to right, #000, transparent)',
+              zIndex: 1,
+              pointerEvents: 'none'
+            }}></div>
+            
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              width: '100px',
+              height: '100%',
+              background: 'linear-gradient(to left, #000, transparent)',
+              zIndex: 1,
+              pointerEvents: 'none'
+            }}></div>
+          </div>
+        </div>
+        
+        {/* Add the keyframes for animation */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            @keyframes scrollLogos {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(calc(-200px * 4 - 60px * 4)); }
+            }
+          `
+        }} />
       </section>
 
       {/* Stay in the Loop Section */}
