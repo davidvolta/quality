@@ -313,6 +313,28 @@ const Quality = () => {
                 </a>
               </div>
             </div>
+
+            {/* NEW: Handheld graphic for mobile, shown only on mobile */}
+            {isMobile && (
+              <div style={{ 
+                display: 'flex', 
+                justifyContent: 'center', 
+                marginTop: '32px', // Added space above the image
+                marginBottom: '20px' // Added space below the image
+              }}>
+                <img 
+                  src="/assets/photos/HandHeld.png" 
+                  alt="QC App on phone in a gloved hand" 
+                  style={{ 
+                    width: '80%', 
+                    maxWidth: '280px', 
+                    height: 'auto',
+                    borderRadius: '16px' // Added rounded corners to match other images
+                  }} 
+                />
+              </div>
+            )}
+            
             <div style={{ 
               clear: 'both'
             }}></div>
