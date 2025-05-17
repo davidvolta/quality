@@ -3,13 +3,13 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './styles/global.css'
 
 // Import pages
-import TestOne from './pages/TestOne'
+import Quality from './pages/Quality'
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<TestOne />} />
+        <Route path="/" element={<Quality />} />
       </Routes>
     </Router>
   )
