@@ -148,7 +148,7 @@ const Quality = () => {
     <div className="quality-page" style={{ background: '#000', color: '#fff', minHeight: '100vh' }}>
       {/* Hero Section */}
       <section className="hero" style={{ 
-        padding: isMobile ? '86px 0 57px' : '172px 0 114px',
+        padding: isMobile ? '86px 0 57px' : (isTablet ? '172px 60px 114px' : '172px 0 114px'),
         position: 'relative',
         overflow: 'hidden'
       }}>
@@ -321,7 +321,7 @@ const Quality = () => {
       </section>
 
       {/* For Supers & Foremen Section */}
-      <section style={{ padding: isMobile ? '40px 20px' : '80px 0', background: '#0A0A0A' }}>
+      <section style={{ padding: isMobile ? '40px 20px' : (isTablet ? '80px 60px' : '80px 0'), background: '#0A0A0A' }}>
         <div className="container">
           <div style={{ 
               maxWidth: '1000px', 
@@ -353,12 +353,15 @@ const Quality = () => {
             <div 
               style={{
                 position: 'relative',
-                height: isMobile ? '450px' : '600px', // Increased height from 350px/450px to 450px/600px
-                margin: '20px auto', // Reduced top/bottom margin from 40px to 20px
+                height: isMobile ? '450px' : '600px', // Mobile height reverted
+                margin: '20px auto',
                 width: '100%',
-                maxWidth: '1000px', // Matched to parent container width
+                maxWidth: '1000px',
                 border: 'none',
-                background: 'transparent'
+                background: 'transparent',
+                display: 'flex',
+                alignItems: 'center', 
+                justifyContent: 'center' // Center content (list-image on mobile)
               }}
               ref={el => {
                 if (!el) return;
@@ -462,25 +465,20 @@ const Quality = () => {
                   notebookImage.style.opacity = 0;
                   listImage.style.opacity = 1;
                   
-                  // Show the feature columns
                   const leftFeatures = el.querySelector('.left-features');
                   const rightFeatures = el.querySelector('.right-features');
                   
-                  if (leftFeatures && rightFeatures) {
-                    // Make the containers visible
+                  if (!isMobile && leftFeatures && rightFeatures) {
                     leftFeatures.style.opacity = '1';
                     rightFeatures.style.opacity = '1';
                     
-                    // Directly animate each list item with staggered delays
                     const leftItems = leftFeatures.querySelectorAll('li');
                     const rightItems = rightFeatures.querySelectorAll('li');
                     
-                    // Calculate total animation duration
                     const leftDuration = 200 + (100 * (leftItems.length - 1));
                     const rightDuration = 500 + (100 * (rightItems.length - 1));
                     const totalDuration = Math.max(leftDuration, rightDuration);
                     
-                    // Animate left feature items
                     leftItems.forEach((item, index) => {
                       setTimeout(() => {
                         item.style.opacity = '1';
@@ -488,21 +486,18 @@ const Quality = () => {
                       }, 200 + (100 * index));
                     });
                     
-                    // Animate right feature items
                     rightItems.forEach((item, index) => {
                       setTimeout(() => {
                         item.style.opacity = '1';
                         item.style.transform = 'translateY(0)';
-                      }, 500 + (100 * index)); // Start right side a bit later
+                      }, 500 + (100 * index));
                     });
                     
-                    // Release scroll hijacking only after all animations complete
                     setTimeout(() => {
                       isScrollHijacked = false;
                       document.body.style.overflow = '';
-                    }, totalDuration + 100); // Add small buffer
+                    }, totalDuration + 100);
                   } else {
-                    // If no features to animate, release scroll immediately
                     isScrollHijacked = false;
                     document.body.style.overflow = '';
                   }
@@ -555,10 +550,10 @@ const Quality = () => {
                 src="/assets/screenshots/List.jpeg" 
                 alt="Digital task list in Construct app"
                 style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
+                  position: isMobile ? 'relative' : 'absolute', // Keep relative for mobile centering in flex
+                  top: isMobile ? 'auto' : '50%',
+                  left: isMobile ? 'auto' : '50%',
+                  transform: isMobile ? 'none' : 'translate(-50%, -50%)',
                   width: 'auto',
                   height: isMobile ? '380px' : isTablet ? '480px' : '520px',
                   maxWidth: '100%',
@@ -575,17 +570,18 @@ const Quality = () => {
               <ul 
                 className="left-features"
                 style={{
+                  ...(isMobile && { display: 'none' }), // Hide on mobile
                   position: 'absolute',
                   top: '50%',
-                  right: isMobile ? '65%' : isTablet ? '65%' : '70%',
+                  right: isTablet ? '65%' : '70%', // Adjusted to remove isMobile condition here
                   transform: 'translateY(-50%)',
                   listStyleType: 'none',
                   padding: 0,
-                  margin: 0,
+                  margin: 0, // Reverted mobile margin
                   textAlign: 'right',
-                  width: isMobile ? '180px' : isTablet ? '220px' : '260px',
+                  width: isTablet ? '220px' : '260px', // Adjusted to remove isMobile condition here
                   opacity: 0,
-                  pointerEvents: 'none', // Don't interfere with scroll events
+                  pointerEvents: 'none',
                   border: 'none',
                   background: 'transparent'
                 }}
@@ -678,17 +674,18 @@ const Quality = () => {
               <ul
                 className="right-features"
                 style={{
+                  ...(isMobile && { display: 'none' }), // Hide on mobile
                   position: 'absolute',
                   top: '50%',
-                  left: isMobile ? '65%' : isTablet ? '65%' : '70%',
+                  left: isTablet ? '65%' : '70%', // Adjusted to remove isMobile condition here
                   transform: 'translateY(-50%)',
                   listStyleType: 'none',
                   padding: 0,
-                  margin: 0,
+                  margin: 0, // Reverted mobile margin
                   textAlign: 'left',
-                  width: isMobile ? '180px' : isTablet ? '220px' : '260px',
+                  width: isTablet ? '220px' : '260px', // Adjusted to remove isMobile condition here
                   opacity: 0,
-                  pointerEvents: 'none', // Don't interfere with scroll events
+                  pointerEvents: 'none',
                   border: 'none',
                   background: 'transparent'
                 }}
@@ -780,7 +777,7 @@ const Quality = () => {
       </section>
 
       {/* For PMs & Owners Section */}
-      <section style={{ padding: isMobile ? '40px 20px' : '80px 0', background: '#000' }}>
+      <section style={{ padding: isMobile ? '40px 20px' : (isTablet ? '80px 60px' : '80px 0'), background: '#000' }}>
         <div className="container">
           <div style={{ 
             display: 'grid', 
@@ -849,7 +846,7 @@ const Quality = () => {
       </section>
 
       {/* The Problem with Rework Section */}
-      <section style={{ padding: isMobile ? '40px 20px' : '80px 0', background: '#0A0A0A' }}>
+      <section style={{ padding: isMobile ? '40px 20px' : (isTablet ? '80px 60px' : '80px 0'), background: '#0A0A0A' }}>
         <div className="container">
           <div style={{ 
             display: 'grid', 
@@ -969,7 +966,7 @@ const Quality = () => {
             padding: isMobile ? '44px 33px' : '66px 66px',
             borderRadius: '8px',
             maxWidth: '990px',
-            width: '90%',
+            width: isMobile ? '90%' : (isTablet ? '80%' : '90%'),
             margin: '0 auto',
             textAlign: 'center',
             boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
@@ -1000,12 +997,12 @@ const Quality = () => {
             </h2>
             <ul ref={addToRefs} style={{ 
               color: '#ccc', 
-              fontSize: isMobile ? '14px' : '16px', 
+              fontSize: isMobile ? '16px' : '18px', // Increased font size
               paddingLeft: '0',
               marginBottom: '0',
               display: 'flex',
               flexDirection: isMobile ? 'column' : 'row',
-              gap: '20px',
+              gap: '30px', // Increased gap
               justifyContent: 'center',
               listStyleType: 'none'
             }}>
@@ -1017,15 +1014,15 @@ const Quality = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                maxWidth: '180px'
+                maxWidth: '220px' // Increased max-width
               }}>
-                <div style={{ marginBottom: '10px', fontSize: '24px', color: 'white' }}>
+                <div style={{ marginBottom: '15px', fontSize: '24px', color: 'white' }}> 
                   <img 
                     src="/assets/icons/pin.png" 
                     alt="Map pin icon" 
                     style={{ 
-                      width: '30px', 
-                      height: '30px',
+                      width: '40px', // Increased icon size
+                      height: '40px', // Increased icon size
                       margin: '0 auto'
                     }} 
                   />
@@ -1040,15 +1037,15 @@ const Quality = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                maxWidth: '180px'
+                maxWidth: '220px' // Increased max-width
               }}>
-                <div style={{ marginBottom: '10px', fontSize: '24px', color: 'white' }}>
+                <div style={{ marginBottom: '15px', fontSize: '24px', color: 'white' }}> 
                   <img 
                     src="/assets/icons/history.png" 
                     alt="History icon" 
                     style={{ 
-                      width: '30px', 
-                      height: '30px',
+                      width: '40px', // Increased icon size
+                      height: '40px', // Increased icon size
                       margin: '0 auto'
                     }} 
                   />
@@ -1063,15 +1060,15 @@ const Quality = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                maxWidth: '180px'
+                maxWidth: '220px' // Increased max-width
               }}>
-                <div style={{ marginBottom: '10px', fontSize: '24px', color: 'white' }}>
+                <div style={{ marginBottom: '15px', fontSize: '24px', color: 'white' }}> 
                   <img 
                     src="/assets/icons/findme.png" 
                     alt="Navigation icon" 
                     style={{ 
-                      width: '30px', 
-                      height: '30px',
+                      width: '40px', // Increased icon size
+                      height: '40px', // Increased icon size
                       margin: '0 auto'
                     }} 
                   />
@@ -1084,7 +1081,7 @@ const Quality = () => {
       </section>
 
       {/* Field Mode Section */}
-      <section style={{ padding: isMobile ? '40px 20px' : '80px 0', background: '#000' }}>
+      <section style={{ padding: isMobile ? '40px 20px' : (isTablet ? '80px 60px' : '80px 0'), background: '#000' }}>
         <div className="container">
           <div style={{ 
             display: 'grid', 
@@ -1153,7 +1150,7 @@ const Quality = () => {
       </section>
 
       {/* Assign, Notify, Close Out Section */}
-      <section style={{ padding: isMobile ? '40px 20px' : '80px 0', background: '#0A0A0A' }}>
+      <section style={{ padding: isMobile ? '40px 20px' : (isTablet ? '80px 60px' : '80px 0'), background: '#0A0A0A' }}>
         <div className="container">
           <div style={{ 
             display: 'grid', 
@@ -1222,21 +1219,19 @@ const Quality = () => {
       </section>
 
       {/* Plugged In Section */}
-      <section style={{ padding: '80px 0', background: '#000' }}>
+      <section style={{ padding: isMobile ? '40px 20px' : (isTablet ? '80px 60px' : '80px 0'), background: '#000' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'center' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '40px', alignItems: 'center' }}>
             <div style={{ 
               width: '100%', 
               height: '350px', 
-              //backgroundImage: 'url("/assets/photos/export.png")',
-              //backgroundSize: 'cover',
-              //backgroundPosition: 'center',
               borderRadius: '8px',
               border: 'none',
               opacity: '0',
               transform: 'translateY(40px)',
               transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
-              overflow: 'hidden' // Ensure image respects border radius
+              overflow: 'hidden',
+              order: isMobile ? -1 : 0 // Added order for mobile stacking
             }} ref={addToImageRefs}>
               <img 
                 src="/assets/photos/export.png"
@@ -1250,7 +1245,13 @@ const Quality = () => {
               />
             </div>
             <div>
-              <h2 style={{ fontSize: '28px', fontWeight: '600', marginBottom: '24px', color: '#fff' }}>
+              <h2 style={{ 
+                fontSize: isMobile ? '24px' : '28px', 
+                fontWeight: '600', 
+                marginBottom: '24px', 
+                color: '#fff',
+                textAlign: isMobile ? 'center' : 'left' 
+              }}>
                 Plugged In: Procore, Sharepoint, and more
               </h2>
               <p style={{ fontSize: '18px', color: '#999', marginBottom: '24px', lineHeight: '1.6' }}>
@@ -1294,7 +1295,7 @@ const Quality = () => {
       </section>
 
       {/* Construct+ Section */}
-      <section style={{ padding: isMobile ? '40px 20px' : '80px 0', background: '#0A0A0A' }}>
+      <section style={{ padding: isMobile ? '40px 20px' : (isTablet ? '80px 60px' : '80px 0'), background: '#0A0A0A' }}>
         <div className="container">
           <div style={{ 
             display: 'grid', 
@@ -1339,15 +1340,13 @@ const Quality = () => {
             <div style={{ 
               width: '100%', 
               height: '350px', 
-              //backgroundImage: 'url("/assets/photos/construct_plus.png")',
-              //backgroundSize: 'cover',
-              //backgroundPosition: 'center',
               borderRadius: '8px',
               border: 'none',
               opacity: '0',
               transform: 'translateY(40px)',
               transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
-              overflow: 'hidden' // Ensure image respects border radius
+              overflow: 'hidden', // Ensure image respects border radius
+              order: isMobile ? -1 : 0 // Added order for mobile stacking
             }} ref={addToImageRefs}>
               <img 
                 src="/assets/photos/construct_plus.png"
@@ -1366,7 +1365,7 @@ const Quality = () => {
 
       {/* Customer Logos Section - Auto-animating Carousel */}
       <section style={{ 
-        padding: isMobile ? '60px 20px' : '80px 0', 
+        padding: isMobile ? '60px 20px' : (isTablet ? '80px 60px' : '80px 0'), 
         background: '#000',
         borderTop: '1px solid rgba(255,255,255,0.05)'
       }}>
