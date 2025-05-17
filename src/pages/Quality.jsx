@@ -141,6 +141,24 @@ const TestOne = () => {
           position: 'relative',
           zIndex: 1
         }}>
+          {isMobile && (
+            <div style={{ 
+              marginBottom: '32px',
+              display: 'flex',
+              justifyContent: 'center'
+            }}>
+              <img 
+                src="/assets/logos/TerabaseConstructLogo.png" 
+                alt="Terabase Construct" 
+                style={{ 
+                  height: '40px', 
+                  width: 'auto',
+                  marginBottom: '0',
+                  filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+                }} 
+              />
+            </div>
+          )}
           <div style={{ 
             position: 'relative',
             paddingLeft: '0',
@@ -149,16 +167,18 @@ const TestOne = () => {
             marginRight: isMobile ? '20px' : 'auto'
           }}>
             {/* Image container with responsive styling */}
-            <div style={{ 
-              width: isMobile ? '120%' : '60%', 
-              height: isMobile ? '360px' : '660px',
-              backgroundImage: 'url("/assets/photos/HandHeld.png")',
-              backgroundSize: 'contain',
-              backgroundPosition: isMobile ? 'center' : 'left',
-              backgroundRepeat: 'no-repeat',
-              float: isMobile ? 'none' : 'left',
-              marginBottom: isMobile ? '20px' : '0'
-            }}></div>
+            {!isMobile && (
+              <div style={{ 
+                width: isTablet ? '42%' : '60%', 
+                height: isTablet ? '462px' : '660px',
+                backgroundImage: 'url("/assets/photos/HandHeld.png")',
+                backgroundSize: 'contain',
+                backgroundPosition: 'left',
+                backgroundRepeat: 'no-repeat',
+                float: 'left',
+                marginBottom: '0'
+              }}></div>
+            )}
             
             {/* Text container with responsive positioning */}
             <div style={{ 
@@ -168,24 +188,27 @@ const TestOne = () => {
               textAlign: isMobile || isTablet ? 'center' : 'left',
               margin: isMobile || isTablet ? '0 auto' : '0 0 0 45%',
               paddingLeft: isMobile || isTablet ? '20px' : '0',
-              paddingRight: isMobile || isTablet ? '20px' : '0'
+              paddingRight: isMobile || isTablet ? '20px' : '0',
+              width: isMobile ? '100%' : '100%'
             }}>
-              <div style={{ 
-                marginBottom: '40px',
-                display: 'flex',
-                justifyContent: isMobile || isTablet ? 'center' : 'flex-start'
-              }}>
-                <img 
-                  src="/assets/logos/TerabaseConstructLogo.png" 
-                  alt="Terabase Construct" 
-                  style={{ 
-                    height: isMobile ? '40px' : '50px', 
-                    width: 'auto',
-                    marginBottom: '24px',
-                    filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
-                  }} 
-                />
-              </div>
+              {!isMobile && (
+                <div style={{ 
+                  marginBottom: '40px',
+                  display: 'flex',
+                  justifyContent: isMobile || isTablet ? 'center' : 'flex-start'
+                }}>
+                  <img 
+                    src="/assets/logos/TerabaseConstructLogo.png" 
+                    alt="Terabase Construct" 
+                    style={{ 
+                      height: isMobile ? '40px' : '50px', 
+                      width: 'auto',
+                      marginBottom: '24px',
+                      filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+                    }} 
+                  />
+                </div>
+              )}
               <h1 style={{ 
                 fontSize: isMobile ? '42px' : isTablet ? '48px' : '72px',
                 fontWeight: '600', 
@@ -207,12 +230,17 @@ const TestOne = () => {
               </p>
               
               <div style={{ 
-                display: 'flex', 
-                justifyContent: isMobile ? 'center' : 'flex-start', 
-                gap: '16px'
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: isMobile || isTablet ? 'center' : 'flex-start',
+                gap: '16px',
+                marginTop: '24px'
               }}>
                 <a href="https://apps.apple.com/us/app/construct-qc/id1552435031" target="_blank" rel="noopener noreferrer" style={{ 
-                  display: 'inline-block'
+                  display: 'inline-block',
+                  minWidth: '140px',
+                  marginBottom: isMobile || isTablet ? '12px' : '0',
+                  marginRight: isMobile || isTablet ? '0' : '16px'
                 }}>
                   <img 
                     src="/assets/badges/apple.png" 
@@ -220,15 +248,20 @@ const TestOne = () => {
                     style={{ 
                       height: '48px', 
                       width: 'auto',
+                      minWidth: '120px',
+                      maxWidth: '100%',
                       transition: 'transform 0.2s ease',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      display: 'block',
+                      margin: isMobile || isTablet ? '0 auto' : '0'
                     }} 
                     onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
                     onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
                   />
                 </a>
                 <a href="https://play.google.com/store/apps/details?id=com.terabase.inspect" target="_blank" rel="noopener noreferrer" style={{ 
-                  display: 'inline-block'
+                  display: 'inline-block',
+                  minWidth: '140px'
                 }}>
                   <img 
                     src="/assets/badges/google.png" 
@@ -236,8 +269,12 @@ const TestOne = () => {
                     style={{ 
                       height: '48px', 
                       width: 'auto',
+                      minWidth: '120px',
+                      maxWidth: '100%',
                       transition: 'transform 0.2s ease',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      display: 'block',
+                      margin: isMobile || isTablet ? '0 auto' : '0'
                     }} 
                     onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
                     onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
@@ -278,7 +315,7 @@ const TestOne = () => {
               maxWidth: '800px',
               margin: '0 auto 30px'
             }}>
-              When you're out in the work, every step matters. And every click too. Construct was designed to help production crews and QC teams navigate the site, capture issues instantly, and close them out — no paperwork, no desktop, no BS.
+              When you're out in the work, every step matters. And every click too. Construct was designed to help production crews and QC teams navigate the project site, capture issues instantly, and close them out — no paperwork, no desktop, no BS.
             </p>
             
             {/* Scroll Story Animation Container */}
@@ -844,10 +881,10 @@ const TestOne = () => {
                 color: '#fff',
                 textAlign: isMobile ? 'center' : 'left' 
               }}>
-                Safety is The Hidden Cost of Rework 
+                The Hidden Cost of Rework: Safety 
               </h2>
               <p style={{ fontSize: isMobile ? '16px' : '18px', color: '#999', marginBottom: '24px', lineHeight: '1.6' }}>
-                <span style={{ color: '#50B8E2', fontWeight: 'bold', fontFamily: 'var(--font-mono)' }}>40%</span> of all site injuries happen during rework. Missed issues don't just cost money — they put crews at risk and projects behind schedule. First Time Quality isn't a slogan. It's a way to build smarter, safer, and faster.
+                <span style={{ color: '#50B8E2', fontWeight: 'bold' }}>40% of all site injuries happen during rework</span>. Missed issues don't just cost money — they put crews at risk and projects behind schedule. First Time Quality isn't a slogan. It's a way to build smarter, safer, and faster.
               </p>
               <ul ref={addToRefs} style={{ color: '#999', fontSize: isMobile ? '14px' : '16px', paddingLeft: '20px', marginBottom: '24px' }}>
                 <li style={{ 
@@ -924,7 +961,7 @@ const TestOne = () => {
           backgroundSize: 'cover',
           backgroundPosition: 'center top',
           zIndex: 1,
-          opacity: '0.9',
+          opacity: '0.4',
           transform: 'translateZ(0)',
         }} 
         ref={el => {
@@ -994,7 +1031,7 @@ const TestOne = () => {
               marginBottom: '24px', 
               color: '#fff'
             }}>
-              See the Job, Not Just the List
+              See the Job, Not Just the Punchlist
             </h2>
             <ul ref={addToRefs} style={{ 
               color: '#ccc', 
