@@ -1260,7 +1260,7 @@ const TestOne = () => {
                 Plugged In: Procore, Sharepoint, and more
               </h2>
               <p style={{ fontSize: '18px', color: '#999', marginBottom: '24px', lineHeight: '1.6' }}>
-                You don't need another silo. Construct integrates with the tools you're already using — from Procore to PowerBI — so nothing gets lost between systems. Export observations, inspections, and summaries in the formats your teams already use.
+                You don't need another silo. Construct integrates with the tools you're already using so nothing gets lost between systems. Export observations, inspections, and summaries in the formats your teams already use.
               </p>
               <ul ref={addToRefs} style={{ color: '#999', fontSize: '16px', paddingLeft: '20px', marginBottom: '24px' }}>
                 <li style={{ 
@@ -1316,10 +1316,10 @@ const TestOne = () => {
                 color: '#fff',
                 textAlign: isMobile ? 'center' : 'left' 
               }}>
-                Coming Soon: The future of Real Time QA
+                Coming Soon: The Future of Real Time QA
               </h2>
               <p style={{ fontSize: isMobile ? '16px' : '18px', color: '#999', marginBottom: '24px', lineHeight: '1.6' }}>
-                We're piloting new ways to automate QC using AI, robotics, and aerial capture. From drone imagery to sensor-based scans, Construct+ is building the future of field data — with less manual input, more real-time insight.
+                We're piloting new ways to automate QC using AI, robotics, and aerial capture. From drone imagery to sensor-based scans, Terabase is making field data captue less manual and more real-time.
               </p>
               <ul ref={addToRefs} style={{ color: '#999', fontSize: isMobile ? '14px' : '16px', paddingLeft: '20px', marginBottom: '24px' }}>
                 <li style={{ 
@@ -1327,7 +1327,7 @@ const TestOne = () => {
                   opacity: '0', 
                   transform: 'translateY(20px)', 
                   transition: 'opacity 0.5s ease, transform 0.5s ease' 
-                }}>Aerial inspection via drones</li>
+                }}>Advanced AI-powered issue detection</li>
                 <li style={{ 
                   marginBottom: '8px', 
                   opacity: '0', 
@@ -1339,7 +1339,7 @@ const TestOne = () => {
                   opacity: '0', 
                   transform: 'translateY(20px)', 
                   transition: 'opacity 0.5s ease, transform 0.5s ease' 
-                }}>AI-powered issue detection + trends</li>
+                }}>Automated Trend Reports and AI Insights</li>
               </ul>
             </div>
             <div style={{ 
@@ -1418,9 +1418,7 @@ const TestOne = () => {
                   flexShrink: 0,
                   display: 'flex', 
                   alignItems: 'center', 
-                  justifyContent: 'center',
-                  background: 'rgba(255,255,255,0.05)',
-                  borderRadius: '8px'
+                  justifyContent: 'center'
                 }}>
                   <img 
                     src={`/assets/logos/companies/${company.file}`}
