@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import CircleProgress from '../components/CircleProgress';
 
-const TestOne = () => {
+const Quality = () => {
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
   // Add refs for each section with bullet points
   const sectionRefs = useRef([]);
   // Add refs for module images
   const imageRefs = useRef([]);
+  const parallaxBgRef = useRef(null); // Added for parallax background
   
   useEffect(() => {
     const handleResize = () => {
@@ -95,6 +96,36 @@ const TestOne = () => {
     };
   }, []);
 
+  // Parallax effect for Digital Twin background
+  useEffect(() => {
+    const element = parallaxBgRef.current;
+    if (!element) return;
+
+    const handleScroll = () => {
+      if (!element.parentElement) return; // Ensure parentElement exists
+
+      const scrollTop = window.pageYOffset;
+      const sectionTop = element.parentElement.offsetTop;
+      const sectionHeight = element.parentElement.offsetHeight;
+      const scrollPosition = scrollTop - sectionTop;
+
+      // Only apply parallax if the section is roughly in view
+      if (scrollTop + window.innerHeight > sectionTop && scrollTop < sectionTop + sectionHeight) {
+        // Move the background at a slower rate than scroll
+        element.style.transform = `translate3d(0, ${scrollPosition * 0.4}px, 0)`;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Call once for initial position after a short delay to ensure layout is stable
+    const timerId = setTimeout(() => handleScroll(), 100);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(timerId);
+    };
+  }, []); // Runs once on mount and cleans up on unmount
+
   // Determine if we're on mobile
   const isMobile = windowWidth < 768;
   const isTablet = windowWidth >= 768 && windowWidth < 1024;
@@ -114,7 +145,7 @@ const TestOne = () => {
   };
 
   return (
-    <div className="test-page test-one" style={{ background: '#000', color: '#fff', minHeight: '100vh' }}>
+    <div className="quality-page" style={{ background: '#000', color: '#fff', minHeight: '100vh' }}>
       {/* Hero Section */}
       <section className="hero" style={{ 
         padding: isMobile ? '86px 0 57px' : '172px 0 114px',
@@ -184,12 +215,12 @@ const TestOne = () => {
             <div style={{ 
               marginLeft: isMobile ? '0' : '45%', 
               paddingTop: isMobile ? '0' : '50px',
-              maxWidth: isMobile ? '100%' : '600px',
+              maxWidth: isMobile ? '100%' : (isTablet ? '100%' : '55%'),
               textAlign: isMobile || isTablet ? 'center' : 'left',
               margin: isMobile || isTablet ? '0 auto' : '0 0 0 45%',
               paddingLeft: isMobile || isTablet ? '20px' : '0',
               paddingRight: isMobile || isTablet ? '20px' : '0',
-              width: isMobile ? '100%' : '100%'
+              width: isMobile ? '100%' : (isTablet ? '100%' : '55%')
             }}>
               {!isMobile && (
                 <div style={{ 
@@ -576,9 +607,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.05s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>Pin Observations on Elements</li>
                 <li style={{ 
                   marginBottom: '8px', 
@@ -587,9 +615,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.1s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>Inspection Checklists</li>
                 <li style={{ 
                   marginBottom: '8px', 
@@ -598,9 +623,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.15s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>Create Non-Compliance Records</li>
                 <li style={{ 
                   marginBottom: '8px', 
@@ -609,9 +631,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.2s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>Assign and Notify QC Issues</li>
                 <li style={{ 
                   marginBottom: '8px', 
@@ -620,9 +639,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.25s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>Add Due Dates</li>
                 <li style={{ 
                   marginBottom: '8px', 
@@ -631,9 +647,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.3s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>GPS Navigation</li>
                 <li style={{ 
                   marginBottom: '8px', 
@@ -642,9 +655,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.35s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>Manage Status Changes</li>
                 <li style={{ 
                   marginBottom: '8px', 
@@ -653,9 +663,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.4s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>Audit Logs</li>
                 <li style={{ 
                   marginBottom: '0', 
@@ -664,9 +671,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.45s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>Role-based Data Access</li>
               </ul>
               
@@ -696,8 +700,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>Web and Mobile Apps</li>
                 <li style={{ 
                   marginBottom: '8px', 
@@ -706,9 +708,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.05s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>Offline Mode</li>
                 <li style={{ 
                   marginBottom: '8px', 
@@ -717,9 +716,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.1s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>Procore Integration</li>
                 <li style={{ 
                   marginBottom: '8px', 
@@ -728,9 +724,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.15s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>Performance Tracking</li>
                 <li style={{ 
                   marginBottom: '8px', 
@@ -739,9 +732,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.2s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>KPI Dashboards</li>
                 <li style={{ 
                   marginBottom: '8px', 
@@ -750,9 +740,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.25s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>Export and Send Punchlists</li>
                 <li style={{ 
                   marginBottom: '8px', 
@@ -761,9 +748,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.3s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>In-app and Email Notifications</li>
                 <li style={{ 
                   marginBottom: '8px', 
@@ -772,9 +756,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.35s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>1-Click Assigned-to-me View</li>
                 <li style={{ 
                   marginBottom: '8px', 
@@ -783,9 +764,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.4s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>Search QC Issues</li>
                 <li style={{ 
                   marginBottom: '0', 
@@ -794,9 +772,6 @@ const TestOne = () => {
                   transition: 'opacity 0.5s ease, transform 0.5s ease',
                   fontSize: isMobile ? '12px' : '14px',
                   color: '#aab7c4',
-                  transitionDelay: '0.45s',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: '0.5px'
                 }}>Unlimited Users</li>
               </ul>
             </div>
@@ -822,10 +797,19 @@ const TestOne = () => {
               opacity: '0',
               transform: 'translateY(40px)',
               transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
-              backgroundImage: 'url("/assets/photos/ipad.png")',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center'
-            }} ref={addToImageRefs}></div>
+              overflow: 'hidden' // Added to contain the image within rounded borders
+            }} ref={addToImageRefs}>
+              <img
+                src="/assets/photos/ipad.png"
+                alt="iPad displaying Construct QC software interface for project management"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'center'
+                }}
+              />
+            </div>
             <div>
               <h2 style={{ 
                 fontSize: isMobile ? '24px' : '28px', 
@@ -964,27 +948,8 @@ const TestOne = () => {
           opacity: '0.4',
           transform: 'translateZ(0)',
         }} 
-        ref={el => {
-          if (el) {
-            // Add parallax scroll effect
-            const handleScroll = () => {
-              const scrollTop = window.pageYOffset;
-              const sectionTop = el.parentElement.offsetTop;
-              const scrollPosition = scrollTop - sectionTop;
-              
-              // Only apply parallax if we're viewing the section
-              if (scrollTop + window.innerHeight > sectionTop && 
-                  scrollTop < sectionTop + el.parentElement.offsetHeight) {
-                // Move the background at a slower rate than scroll
-                el.style.transform = `translate3d(0, ${scrollPosition * 0.4}px, 0)`;
-              }
-            };
-            
-            window.addEventListener('scroll', handleScroll);
-            // Clean up event listener on component unmount
-            setTimeout(() => handleScroll(), 100); // Initial position
-          }
-        }}></div>
+        ref={parallaxBgRef}
+        ></div>
         
         {/* Text Overlay Box */}
         <div style={{ 
@@ -1130,17 +1095,25 @@ const TestOne = () => {
             <div style={{ 
               width: '100%', 
               height: isMobile ? '400px' : '550px',
-              backgroundImage: 'url("/assets/screenshots/Field_Mode.PNG")',
-              backgroundSize: 'contain',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
               borderRadius: '8px',
               border: 'none',
               order: isMobile ? '-1' : '0',
               opacity: '0',
               transform: 'translateY(40px)',
-              transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
-            }} ref={addToImageRefs}></div>
+              transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
+              overflow: 'hidden' // Ensure image respects border radius
+            }} ref={addToImageRefs}>
+              <img 
+                src="/assets/screenshots/Field_Mode.PNG"
+                alt="Construct app in Field Mode on a tablet, showing offline capabilities."
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain', // Was contain for backgroundSize
+                  objectPosition: 'center'
+                }}
+              />
+            </div>
             <div>
               <h2 style={{ 
                 fontSize: isMobile ? '24px' : '28px', 
@@ -1225,16 +1198,25 @@ const TestOne = () => {
             <div style={{ 
               width: '100%', 
               height: isMobile ? '250px' : '350px',
-              backgroundImage: 'url("/assets/photos/panel_inspectors.png")',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
               borderRadius: '8px',
               border: 'none',
               order: isMobile ? '-1' : '0',
               opacity: '0',
               transform: 'translateY(40px)',
-              transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
-            }} ref={addToImageRefs}></div>
+              transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
+              overflow: 'hidden' // Ensure image respects border radius
+            }} ref={addToImageRefs}>
+              <img 
+                src="/assets/photos/panel_inspectors.png"
+                alt="Two panel inspectors working on a solar farm, ensuring quality control."
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover', // Was cover for backgroundSize
+                  objectPosition: 'center'
+                }}
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -1246,15 +1228,27 @@ const TestOne = () => {
             <div style={{ 
               width: '100%', 
               height: '350px', 
-              backgroundImage: 'url("/assets/photos/export.png")',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
+              //backgroundImage: 'url("/assets/photos/export.png")',
+              //backgroundSize: 'cover',
+              //backgroundPosition: 'center',
               borderRadius: '8px',
               border: 'none',
               opacity: '0',
               transform: 'translateY(40px)',
-              transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
-            }} ref={addToImageRefs}></div>
+              transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
+              overflow: 'hidden' // Ensure image respects border radius
+            }} ref={addToImageRefs}>
+              <img 
+                src="/assets/photos/export.png"
+                alt="Screenshot of data export interface from Construct QC to other platforms."
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover', // Was cover for backgroundSize
+                  objectPosition: 'center'
+                }}
+              />
+            </div>
             <div>
               <h2 style={{ fontSize: '28px', fontWeight: '600', marginBottom: '24px', color: '#fff' }}>
                 Plugged In: Procore, Sharepoint, and more
@@ -1345,15 +1339,27 @@ const TestOne = () => {
             <div style={{ 
               width: '100%', 
               height: '350px', 
-              backgroundImage: 'url("/assets/photos/construct_plus.png")',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
+              //backgroundImage: 'url("/assets/photos/construct_plus.png")',
+              //backgroundSize: 'cover',
+              //backgroundPosition: 'center',
               borderRadius: '8px',
               border: 'none',
               opacity: '0',
               transform: 'translateY(40px)',
-              transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
-            }} ref={addToImageRefs}></div>
+              transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
+              overflow: 'hidden' // Ensure image respects border radius
+            }} ref={addToImageRefs}>
+              <img 
+                src="/assets/photos/construct_plus.png"
+                alt="Futuristic image representing AI and robotics in construction QA."
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover', // Was cover for backgroundSize
+                  objectPosition: 'center'
+                }}
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -1476,4 +1482,4 @@ const TestOne = () => {
   );
 };
 
-export default TestOne;
+export default Quality;
