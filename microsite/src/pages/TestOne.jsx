@@ -117,7 +117,7 @@ const TestOne = () => {
     <div className="test-page test-one" style={{ background: '#000', color: '#fff', minHeight: '100vh' }}>
       {/* Hero Section */}
       <section className="hero" style={{ 
-        padding: isMobile ? '60px 0 40px' : '120px 0 80px',
+        padding: isMobile ? '86px 0 57px' : '172px 0 114px',
         position: 'relative',
         overflow: 'hidden'
       }}>
@@ -150,8 +150,8 @@ const TestOne = () => {
           }}>
             {/* Image container with responsive styling */}
             <div style={{ 
-              width: isMobile ? '100%' : '50%', 
-              height: isMobile ? '300px' : '550px',
+              width: isMobile ? '120%' : '60%', 
+              height: isMobile ? '360px' : '660px',
               backgroundImage: 'url("/assets/photos/HandHeld.png")',
               backgroundSize: 'contain',
               backgroundPosition: isMobile ? 'center' : 'left',
@@ -278,7 +278,7 @@ const TestOne = () => {
               maxWidth: '800px',
               margin: '0 auto 30px'
             }}>
-              When you're out in the work, every step matters. Every click too. Construct was designed to help production crews and QC teams navigate the site, capture issues instantly, and close them out — no paperwork, no desktop, no BS.
+              When you're out in the work, every step matters. And every click too. Construct was designed to help production crews and QC teams navigate the site, capture issues instantly, and close them out — no paperwork, no desktop, no BS.
             </p>
             
             {/* Scroll Story Animation Container */}
@@ -785,23 +785,10 @@ const TestOne = () => {
               opacity: '0',
               transform: 'translateY(40px)',
               transition: 'opacity 0.6s ease-out, transform 0.6s ease-out',
-              overflow: 'hidden'
-            }} ref={addToImageRefs}>
-              <video 
-                autoPlay 
-                loop 
-                muted 
-                playsInline
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  borderRadius: '8px'
-                }}
-              >
-                <source src="/assets/video/1091074319-preview.mp4" type="video/mp4" />
-              </video>
-            </div>
+              backgroundImage: 'url("/assets/photos/ipad.png")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }} ref={addToImageRefs}></div>
             <div>
               <h2 style={{ 
                 fontSize: isMobile ? '24px' : '28px', 
@@ -1201,7 +1188,7 @@ const TestOne = () => {
             <div style={{ 
               width: '100%', 
               height: isMobile ? '250px' : '350px',
-              backgroundImage: 'url("/assets/screenshots/IMG_6850.PNG")',
+              backgroundImage: 'url("/assets/photos/panel_inspectors.png")',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               borderRadius: '8px',
